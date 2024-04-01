@@ -1,3 +1,4 @@
+package com.example.hamacasbackend;
 
 import com.example.hamacasbackend.entidades.Alumno;
 import com.example.hamacasbackend.entidades.Libro;
@@ -15,11 +16,11 @@ import java.util.*;
 
 
 /*Con RestController indicamos que esta clase es el controlador para las peticiones HTTP o HTTPS de tipo REST, esto
-* es, enviaremos información al servidor en formato JSON y recibiremos información desde el servidor en formato JSON*/
+ * es, enviaremos información al servidor en formato JSON y recibiremos información desde el servidor en formato JSON*/
 @RestController
 /*En RequestMapping indicaremos en la url que todas las direcciones que incluyan "userapi" serám respondidas por este
-* controlador*/
-@RequestMapping("/userapi")
+ * controlador*/
+@RequestMapping("/hamacaapi")
 public class AlumnoController {
     private final AlumnoRepositorio alumnoRepositorio;//Aquí vamos a referenciar nuestro repositorio
     private final LibroRepositorio libroRepositorio;
@@ -30,12 +31,12 @@ public class AlumnoController {
         this.libroRepositorio = libroRepositorio;
     }
     /*Con GetMapping estamos indicando que el tipo de petición HTTP o HTTPS debe ser GET y también indicamos qué
-    * ruta dentro de la url (listaAlumnos) debemos usar para acceder a este método en el controlador*/
-    @GetMapping("/listaAlumnos")
+     * ruta dentro de la url (repositoryList) debemos usar para acceder a este método en el controlador*/
+    @GetMapping("/repositoryList")
     public List<Alumno> getAlumnos(){
         /*Con un findAll accedemos a todos los Alumnos que haya en la base de datos. La lista de Alumnos devuelta
-        * será transformada a formato JSON automáticamente por SpringBoot usando las reglas que hayamos especificado
-        * en el application.properties y en la entidad que corresponda, en este caso Alumno*/
+         * será transformada a formato JSON automáticamente por SpringBoot usando las reglas que hayamos especificado
+         * en el application.properties y en la entidad que corresponda, en este caso Alumno*/
         Iterable<Alumno> iterar=alumnoRepositorio.findAll();
         Iterator<Alumno> iterus=iterar.iterator();
         List<Alumno> resultado=new ArrayList<>();
@@ -47,7 +48,7 @@ public class AlumnoController {
 
     /*Con PostMapping estamos indicando que el tipo de petición HTTP o HTTPS debe ser POST y también indicamos qué
      * ruta dentro de la url (nuevoAlumno) debemos usar para acceder a este método en el controlador*/
-    @PostMapping("/nuevoAlumno")
+    @PostMapping("/newReport")
     /*En este caso el método va a devolver al cliente una entidad de tipo Long (la clave primaria del nuevo Alumno
     creado en la base de datos). Además estamos incluyendo como parámetro de este método un objeto de la clase Alumno
     escrito en formato JSON (esto lo estamos indicando con la anotación RequestBody). Desde el cliente controlaremos
@@ -67,11 +68,11 @@ public class AlumnoController {
     }
 
     /*En este GetMapping vamos a incluir en la url una variable que será la clave primaria del Alumno que queremos
-    * obtener. En la url la ruta que usaremos para accerder a este método del controlador será getAlumno y entre
-    * llaves indicaremos el nombre de la variable que posteriormente usaremos como parámetro*/
+     * obtener. En la url la ruta que usaremos para accerder a este método del controlador será getAlumno y entre
+     * llaves indicaremos el nombre de la variable que posteriormente usaremos como parámetro*/
     @GetMapping("/getAlumno{id}")
     /*En este caso el método va a devolver al cliente una entidad de tipo Alumno. Además indicamos con la anotación
-    * PathVariable que la url va a incluir un parámetro cuyo nombre será "id"*/
+     * PathVariable que la url va a incluir un parámetro cuyo nombre será "id"*/
     public ResponseEntity<Alumno> getAlumno(@PathVariable("id") Long id) {
         //Obtenemos un único Alumno usando el método findById del repositorio que ya conocemos
         Optional<Alumno> alumnoEncontrado = alumnoRepositorio.findById(id);
@@ -87,8 +88,8 @@ public class AlumnoController {
     }
 
     /*Este método es muy parecido al de crear nuevo Alumno. La primera diferencia es que usamos una petición HTTP
-    * o HTTPS PUT en lugar de POST. La segunda diferencia es que la ruta de la url cambia a "actualizarAlumno". El
-    * resto del método es igual (mismos ResponseEntity, RequestBody y método del repositorio de la base de datos).*/
+     * o HTTPS PUT en lugar de POST. La segunda diferencia es que la ruta de la url cambia a "actualizarAlumno". El
+     * resto del método es igual (mismos ResponseEntity, RequestBody y método del repositorio de la base de datos).*/
     @PutMapping("/actualizarAlumno")
     public ResponseEntity<Long> modificar(@RequestBody Alumno Alumno)
             throws URISyntaxException {
@@ -101,13 +102,13 @@ public class AlumnoController {
     }
 
     /*El método que usaremos para eliminar un Alumno deberá utilizar la petición DELETE de HTTP o HTTPS. Icluirá un
-    * parámetro con la clave primaria del Alumno que queremos eliminar, como ya hicimos cuando quisimos obtener
-    * un único Alumno. La ruta de la url usada en este caso es "eliminarAlumno" con la variable "id" indicada entre
-    * llaves*/
+     * parámetro con la clave primaria del Alumno que queremos eliminar, como ya hicimos cuando quisimos obtener
+     * un único Alumno. La ruta de la url usada en este caso es "eliminarAlumno" con la variable "id" indicada entre
+     * llaves*/
     @DeleteMapping("/eliminarAlumno{id}")
     /*Devolvemos un ResponseEntity de tipo Object ya que realmente la respuesta va a ser vacía, bien porque no se haya
-    * encontrado al Alumno quq deseamos eliminar o bien porque al eliminarlo indicamos que hemos tenido éxito mediante
-    * un "NO CONTENT".*/
+     * encontrado al Alumno quq deseamos eliminar o bien porque al eliminarlo indicamos que hemos tenido éxito mediante
+     * un "NO CONTENT".*/
     public ResponseEntity<Object> eliminar(@PathVariable Long id) {
         Optional<Alumno> alumnoEliminable = alumnoRepositorio.findById(id);
         if (alumnoEliminable.isEmpty()) {
