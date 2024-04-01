@@ -1,4 +1,4 @@
-package com.example.hamacasbackend.entidades;
+package com.example.practica1tema3.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
