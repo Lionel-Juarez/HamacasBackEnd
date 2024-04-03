@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString
 public class Reporte {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReporte;

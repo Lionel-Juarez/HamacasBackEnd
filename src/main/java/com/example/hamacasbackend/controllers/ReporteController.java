@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/reportapi")
+@RequestMapping("/api/reportes")
 public class ReporteController {
     private final ReporteRepositorio reportRepository;
     private final UsuarioRepositorio usuarioRepositorio; // Inyectar el repositorio de Usuario

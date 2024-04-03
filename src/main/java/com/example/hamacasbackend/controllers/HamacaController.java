@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/hamacaapi")
+@RequestMapping("/api/hamacas")
 public class HamacaController {
     private final HamacaRepositorio hamacaRepositorio;
 
