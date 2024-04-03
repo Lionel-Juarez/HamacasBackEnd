@@ -1,6 +1,6 @@
 package com.example.hamacasbackend;
 
-import com.example.hamacasbackend.repositorios.ReportRepository;
+import com.example.hamacasbackend.repositorios.ReporteRepositorio;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +13,7 @@ public class HamacasBackEndApplication {
     }
 
     @Bean
-    public CommandLineRunner run(ReportRepository reportRepository) {
+    public CommandLineRunner run(ReporteRepositorio reporteRepositorio) {
         return (args) -> {
         };
     }
