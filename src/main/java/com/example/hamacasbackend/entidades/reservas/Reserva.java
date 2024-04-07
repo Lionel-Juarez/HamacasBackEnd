@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idReserva;
 
     @ManyToOne
     @JoinColumn(name = "idHamaca", referencedColumnName = "idHamaca")

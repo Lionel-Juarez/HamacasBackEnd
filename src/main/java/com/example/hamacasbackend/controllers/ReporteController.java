@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequestMapping("/api/reportes")
 public class ReporteController {
     private final ReporteRepositorio reportRepository;
-    private final UsuarioRepositorio usuarioRepositorio;
+    private final UsuarioRepositorio usuarioRepositorio; // Inyectar el repositorio de Usuario
 
     @Autowired
     public ReporteController(ReporteRepositorio reportRepository, UsuarioRepositorio usuarioRepositorio) {
@@ -35,6 +35,8 @@ public class ReporteController {
     @PostMapping("/newReport")
     public ResponseEntity<Reporte> createReport(@RequestBody Reporte report) {
         try {
+
+            // Opcional: Manejar la lógica de asignación o verificación de Usuario aquí
             Reporte createdReport = reportRepository.save(report);
             return new ResponseEntity<>(createdReport, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -55,6 +57,7 @@ public class ReporteController {
             report.setEstado(reportDetails.getEstado());
             report.setComentarioCompleto(reportDetails.getComentarioCompleto());
             report.setFechaCreacion(reportDetails.getFechaCreacion());
+            // Asumiendo que el usuario ya existe y se envía el ID del usuario como referencia
             if (reportDetails.getCreadoPor() != null && reportDetails.getCreadoPor().getId() != null) {
                 Usuario usuario = usuarioRepositorio.findById(reportDetails.getCreadoPor().getId()).orElse(null);
                 report.setCreadoPor(usuario);
@@ -63,6 +66,7 @@ public class ReporteController {
             return new ResponseEntity<>(updatedReport, HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     @DeleteMapping("/deleteReport/{id}")
     public ResponseEntity<HttpStatus> deleteReport(@PathVariable("id") Long id) {
