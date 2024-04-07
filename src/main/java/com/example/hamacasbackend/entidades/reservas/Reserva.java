@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idReserva; // Agregado para actuar como clave primaria
 
     @ManyToOne
     @JoinColumn(name = "idHamaca", referencedColumnName = "idHamaca")
