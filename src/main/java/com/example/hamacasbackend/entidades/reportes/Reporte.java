@@ -1,6 +1,7 @@
 package com.example.hamacasbackend.entidades.reportes;
 
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -25,8 +28,8 @@ public class Reporte {
     @Column(length = 200)
     private String comentarioCompleto;
 
-    private LocalDate fechaCreacion;
-
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private LocalDateTime fechaCreacion;
     @ManyToOne
     @JoinColumn(name = "created_by_usuario_id", referencedColumnName = "id") // Ajustado para referenciar el nuevo ID
     private Usuario creadoPor;

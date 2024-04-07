@@ -18,5 +18,5 @@ public class Usuario {
 
     private String nombreUsuario;
     private String password;
-    private boolean esAdministrador;
+    private String rol;
 }

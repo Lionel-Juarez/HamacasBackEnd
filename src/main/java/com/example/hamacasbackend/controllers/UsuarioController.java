@@ -28,7 +28,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    @PostMapping("/nuevo")
+    @PostMapping("/nuevoUsuario")
     public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
         try {
             Usuario createdUsuario = usuarioRepositorio.save(usuario);
@@ -44,18 +44,18 @@ public class UsuarioController {
         return usuarioFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/actualizar/{id}")
+    @PutMapping("/actualizarUsuario/{id}")
     public ResponseEntity<Usuario> updateUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuarioDetails) {
         return usuarioRepositorio.findById(id).map(usuario -> {
             usuario.setNombreUsuario(usuarioDetails.getNombreUsuario());
             usuario.setPassword(usuarioDetails.getPassword());
-            usuario.setEsAdministrador(usuarioDetails.isEsAdministrador());
+            usuario.setRol(usuarioDetails.getRol());
             Usuario updatedUsuario = usuarioRepositorio.save(usuario);
             return new ResponseEntity<>(updatedUsuario, HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/eliminar/{id}")
+    @DeleteMapping("/eliminarUsuario/{id}")
     public ResponseEntity<HttpStatus> deleteUsuario(@PathVariable("id") Long id) {
         try {
             usuarioRepositorio.deleteById(id);

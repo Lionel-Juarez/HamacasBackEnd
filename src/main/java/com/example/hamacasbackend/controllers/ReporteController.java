@@ -34,15 +34,16 @@ public class ReporteController {
 
     @PostMapping("/newReport")
     public ResponseEntity<Reporte> createReport(@RequestBody Reporte report) {
+        System.out.println("Creating report with data: " + report);
         try {
-
-            // Opcional: Manejar la lógica de asignación o verificación de Usuario aquí
             Reporte createdReport = reportRepository.save(report);
             return new ResponseEntity<>(createdReport, HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
+
 
     @GetMapping("/getReport/{id}")
     public ResponseEntity<Reporte> getReportById(@PathVariable("id") Long id) {
