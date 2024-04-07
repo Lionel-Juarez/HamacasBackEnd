@@ -25,7 +25,7 @@ public class ReporteController {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
-    @GetMapping("/reports")
+    @GetMapping("/")
     public ResponseEntity<List<Reporte>> getAllReports(){
         List<Reporte> reports = new ArrayList<>();
         reportRepository.findAll().forEach(reports::add);
@@ -35,6 +35,7 @@ public class ReporteController {
     @PostMapping("/newReport")
     public ResponseEntity<Reporte> createReport(@RequestBody Reporte report) {
         try {
+
             // Opcional: Manejar la lógica de asignación o verificación de Usuario aquí
             Reporte createdReport = reportRepository.save(report);
             return new ResponseEntity<>(createdReport, HttpStatus.CREATED);

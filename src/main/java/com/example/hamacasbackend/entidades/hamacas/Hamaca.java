@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Hamaca {
+
     @Id // Designa este campo como la clave primaria
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura la generación automática del valor
     private Long idHamaca;
