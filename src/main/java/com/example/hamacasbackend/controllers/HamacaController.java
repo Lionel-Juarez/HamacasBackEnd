@@ -23,7 +23,7 @@ public class HamacaController {
         this.hamacaRepositorio = hamacaRepositorio;
     }
 
-    @GetMapping("/hamacas")
+    @GetMapping("/")
     public ResponseEntity<List<Hamaca>> getAllHamacas(){
         List<Hamaca> hamacas = new ArrayList<>();
         hamacaRepositorio.findAll().forEach(hamacas::add);
