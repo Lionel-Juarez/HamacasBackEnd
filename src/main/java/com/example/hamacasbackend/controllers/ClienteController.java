@@ -28,7 +28,7 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
-    @PostMapping("/nuevo")
+    @PostMapping("/nuevoCliente")
     public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
         try {
             Cliente createdCliente = clienteRepositorio.save(cliente);
@@ -44,7 +44,7 @@ public class ClienteController {
         return clienteFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/actualizar/{id}")
+    @PutMapping("/actualizarCliente/{id}")
     public ResponseEntity<Cliente> updateCliente(@PathVariable("id") Long id, @RequestBody Cliente clienteDetails) { // Cambiado de int a Long
         return clienteRepositorio.findById(id).map(cliente -> {
             cliente.setNombreCompleto(clienteDetails.getNombreCompleto());
@@ -54,7 +54,7 @@ public class ClienteController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/eliminar/{id}")
+    @DeleteMapping("/eliminarCliente/{id}")
     public ResponseEntity<HttpStatus> deleteCliente(@PathVariable("id") Long id) { // Cambiado de int a Long
         try {
             clienteRepositorio.deleteById(id);
