@@ -1,7 +1,11 @@
 package com.example.hamacasbackend.controllers;
 
 import com.example.hamacasbackend.entidades.reservas.Reserva;
+import com.example.hamacasbackend.entidades.reservas.ReservaDTO;
+import com.example.hamacasbackend.repositorios.ClienteRepositorio;
+import com.example.hamacasbackend.repositorios.HamacaRepositorio;
 import com.example.hamacasbackend.repositorios.ReservaRepositorio;
+import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +18,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/reservas")
 public class ReservaController {
-    private final ReservaRepositorio reservaRepositorio;
+    @Autowired
+    private ReservaRepositorio reservaRepositorio;
+    @Autowired
+    private ClienteRepositorio clienteRepositorio;
+    @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private HamacaRepositorio hamacaRepositorio;
 
     @Autowired
     public ReservaController(ReservaRepositorio reservaRepositorio) {
@@ -30,14 +41,25 @@ public class ReservaController {
 
 
     @PostMapping("/nuevaReserva")
-    public ResponseEntity<Reserva> createReserva(@RequestBody Reserva reserva) {
+    public ResponseEntity<Reserva> createReserva(@RequestBody ReservaDTO reservaDTO) {
         try {
-            Reserva newReserva = reservaRepositorio.save(reserva);
-            return new ResponseEntity<>(newReserva, HttpStatus.CREATED);
+            Reserva nuevaReserva = new Reserva();
+            nuevaReserva.setHamaca(hamacaRepositorio.findById(reservaDTO.getIdHamaca()).orElse(null));
+            nuevaReserva.setCliente(clienteRepositorio.findById(reservaDTO.getIdCliente()).orElse(null));
+            nuevaReserva.setCreadaPor(usuarioRepositorio.findById(reservaDTO.getIdUsuario()).orElse(null));
+            nuevaReserva.setEstado(reservaDTO.getEstado());
+            nuevaReserva.setPagada(reservaDTO.isPagada());
+            nuevaReserva.setMetodoPago(reservaDTO.getMetodoPago());
+            nuevaReserva.setFechaReserva(reservaDTO.getFechaReserva());
+            nuevaReserva.setFechaPago(reservaDTO.getFechaPago());
+
+            Reserva savedReserva = reservaRepositorio.save(nuevaReserva);
+            return new ResponseEntity<>(savedReserva, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Reserva> getReservaById(@PathVariable("id") Long id) {

@@ -3,6 +3,7 @@ package com.example.hamacasbackend.entidades.reservas;
 import com.example.hamacasbackend.entidades.cliente.Cliente;
 import com.example.hamacasbackend.entidades.hamacas.Hamaca;
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,6 +39,10 @@ public class Reserva {
     private String estado;
     private boolean pagada;
     private String metodoPago;
-    private LocalDateTime fechaPago;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime fechaReserva;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private LocalDateTime fechaPago;
 }
