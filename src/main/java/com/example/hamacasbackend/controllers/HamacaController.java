@@ -30,7 +30,7 @@ public class HamacaController {
         return ResponseEntity.ok(hamacas);
     }
 
-    @PostMapping("/newHamaca")
+    @PostMapping("/nuevaHamaca")
     public ResponseEntity<Hamaca> createHamaca(@RequestBody Hamaca hamaca) {
         try {
             Hamaca createdHamaca = hamacaRepositorio.save(hamaca);

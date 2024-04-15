@@ -24,4 +24,6 @@ public class Hamaca {
 
     @Column
     private boolean ocupada;
+    @Column
+    private int planoId;
 }

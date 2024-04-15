@@ -29,7 +29,7 @@ public class ReservaController {
     }
 
 
-    @PostMapping("/nueva")
+    @PostMapping("/nuevaReserva")
     public ResponseEntity<Reserva> createReserva(@RequestBody Reserva reserva) {
         try {
             Reserva newReserva = reservaRepositorio.save(reserva);
@@ -46,7 +46,7 @@ public class ReservaController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/actualizar/{id}")
+    @PutMapping("/actualizarReserva/{id}")
     public ResponseEntity<Reserva> updateReserva(@PathVariable("id") Long id, @RequestBody Reserva reservaDetails) {
         Optional<Reserva> reservaData = reservaRepositorio.findById(id);
 
@@ -64,7 +64,7 @@ public class ReservaController {
         }
     }
 
-    @DeleteMapping("/eliminar/{id}")
+    @DeleteMapping("/eliminarReserva/{id}")
     public ResponseEntity<HttpStatus> deleteReserva(@PathVariable("id") Long id) {
         try {
             reservaRepositorio.deleteById(id);
