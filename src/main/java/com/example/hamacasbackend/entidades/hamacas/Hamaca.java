@@ -1,29 +1,29 @@
 package com.example.hamacasbackend.entidades.hamacas;
 
+import com.example.hamacasbackend.entidades.reservas.Reserva;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity // Marca la clase como una entidad JPA
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Hamaca {
-
-    @Id // Designa este campo como la clave primaria
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura la generación automática del valor
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHamaca;
 
-    @Column // Es opcional si el nombre del campo coincide con el nombre de la columna en la DB
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idReserva", nullable = true)
+    @JsonBackReference
+    private Reserva reserva;
+
     private double precio;
-
-    @Column
     private boolean reservada;
-
-    @Column
     private boolean ocupada;
-    @Column
     private int planoId;
 }

@@ -3,17 +3,14 @@ package com.example.hamacasbackend.entidades.reservas;
 import com.example.hamacasbackend.entidades.cliente.Cliente;
 import com.example.hamacasbackend.entidades.hamacas.Hamaca;
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,10 +20,6 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReserva;
-
-    @ManyToOne
-    @JoinColumn(name = "idHamaca", referencedColumnName = "idHamaca")
-    private Hamaca hamaca;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario", referencedColumnName = "id")
@@ -45,4 +38,10 @@ public class Reserva {
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime fechaPago;
+
+    // Removido cascade y orphanRemoval
+    @OneToMany(mappedBy = "reserva", fetch = FetchType.LAZY)
+    private List<Hamaca> hamacas;
 }
+
+
