@@ -81,7 +81,7 @@ public class ReservaController {
             nuevaReserva.setFechaReserva(reservaDTO.getFechaReserva());
             nuevaReserva.setFechaPago(reservaDTO.getFechaPago());
 
-            hamacas.forEach(hamaca -> hamaca.setReserva(nuevaReserva));
+            hamacas.forEach(hamaca -> hamaca.setIdReserva(nuevaReserva));
 
             Reserva savedReserva = reservaRepositorio.save(nuevaReserva);
             LOGGER.info("Reserva creada con éxito: " + savedReserva.getIdReserva());
@@ -110,10 +110,10 @@ public class ReservaController {
         if (reservaData.isPresent()) {
             Reserva updatedReserva = reservaData.get();
             List<Hamaca> hamacas = (List<Hamaca>) hamacaRepositorio.findAllById(reservaDTO.getIdHamacas());
-            updatedReserva.getHamacas().forEach(h -> h.setReserva(null)); // Desasocia la reserva anterior
+            updatedReserva.getHamacas().forEach(h -> h.setIdReserva(null)); // Desasocia la reserva anterior
             updatedReserva.setHamacas(hamacas);
             for (Hamaca hamaca : hamacas) {
-                hamaca.setReserva(updatedReserva); // Asocia la nueva reserva
+                hamaca.setIdReserva(updatedReserva); // Asocia la nueva reserva
             }
 
             updatedReserva.setCliente(clienteRepositorio.findById(reservaDTO.getIdCliente()).orElse(null));
@@ -138,7 +138,7 @@ public class ReservaController {
                 Reserva reservaAEliminar = reserva.get();
                 // Desvincular las hamacas asociadas
                 for (Hamaca hamaca : reservaAEliminar.getHamacas()) {
-                    hamaca.setReserva(null);
+                    hamaca.setIdReserva(null);
                     hamacaRepositorio.save(hamaca);
                 }
                 // Ahora que las hamacas están desvinculadas, eliminamos la reserva

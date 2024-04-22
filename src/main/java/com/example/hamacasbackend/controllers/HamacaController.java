@@ -2,8 +2,10 @@ package com.example.hamacasbackend.controllers;
 
 import com.example.hamacasbackend.entidades.hamacas.Hamaca;
 import com.example.hamacasbackend.entidades.reportes.Reporte;
+import com.example.hamacasbackend.entidades.reservas.Reserva;
 import com.example.hamacasbackend.repositorios.HamacaRepositorio;
 import com.example.hamacasbackend.repositorios.ReporteRepositorio;
+import com.example.hamacasbackend.repositorios.ReservaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,8 @@ import java.util.Optional;
 @RequestMapping("/api/hamacas")
 public class HamacaController {
     private final HamacaRepositorio hamacaRepositorio;
-
+    @Autowired
+    private ReservaRepositorio reservaRepositorio;
     @Autowired
     public HamacaController(HamacaRepositorio hamacaRepositorio) {
         this.hamacaRepositorio = hamacaRepositorio;
@@ -52,10 +55,16 @@ public class HamacaController {
             hamaca.setPrecio(hamacaDetails.getPrecio());
             hamaca.setReservada(hamacaDetails.isReservada());
             hamaca.setOcupada(hamacaDetails.isOcupada());
+            if (hamacaDetails.getIdReserva() != null && hamacaDetails.getIdReserva().getIdReserva() != null) {
+                Reserva reserva = reservaRepositorio.findById(hamacaDetails.getIdReserva().getIdReserva())
+                        .orElse(new Reserva()); // handle null case or throw
+                hamaca.setIdReserva(reserva);
+            }
             Hamaca updatedHamaca = hamacaRepositorio.save(hamaca);
             return new ResponseEntity<>(updatedHamaca, HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     @DeleteMapping("/deleteHamaca/{id}")
     public ResponseEntity<HttpStatus> deleteHamaca(@PathVariable("id") Long id) {

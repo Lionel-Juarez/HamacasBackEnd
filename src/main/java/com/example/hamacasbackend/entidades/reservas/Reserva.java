@@ -39,8 +39,7 @@ public class Reserva {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime fechaPago;
 
-    // Removido cascade y orphanRemoval
-    @OneToMany(mappedBy = "reserva", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "idReserva")
     private List<Hamaca> hamacas;
 }
 

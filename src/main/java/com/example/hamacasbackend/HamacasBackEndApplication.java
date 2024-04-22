@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 public class HamacasBackEndApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(com.example.hamacasbackend.HamacasBackEndApplication.class, args);
+        SpringApplication.run(HamacasBackEndApplication.class, args);
     }
 
     @Bean
