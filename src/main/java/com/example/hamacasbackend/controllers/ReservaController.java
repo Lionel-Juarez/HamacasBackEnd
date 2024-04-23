@@ -10,6 +10,7 @@ import com.example.hamacasbackend.repositorios.HamacaRepositorio;
 import com.example.hamacasbackend.repositorios.ReservaRepositorio;
 import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
 import org.springframework.dao.DataAccessException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.hibernate.query.sqm.tree.SqmNode.log;
 
@@ -44,11 +49,20 @@ public class ReservaController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Reserva>> getAllReservas() {
-        List<Reserva> reservas = new ArrayList<>();
-        reservaRepositorio.findAll().forEach(reservas::add); // Convierte Iterable a List
+    public ResponseEntity<List<Reserva>> getAllReservas(@RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha) {
+        List<Reserva> reservas;
+        if (fecha != null) {
+            LocalDateTime startOfDay = fecha.atStartOfDay();
+            LocalDateTime endOfDay = fecha.plusDays(1).atStartOfDay();
+            reservas = reservaRepositorio.findByFechaReserva(startOfDay, endOfDay);
+        } else {
+            Iterable<Reserva> result = reservaRepositorio.findAll();
+            reservas = StreamSupport.stream(result.spliterator(), false)
+                    .collect(Collectors.toList());
+        }
         return new ResponseEntity<>(reservas, HttpStatus.OK);
     }
+
 
 
     @PostMapping("/nuevaReserva")
@@ -151,33 +165,4 @@ public class ReservaController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-//    @Transactional
-//    @DeleteMapping("/eliminarReserva/{id}")
-//    public ResponseEntity<HttpStatus> deleteReserva(@PathVariable("id") Long id) {
-//        try {
-//            Optional<Reserva> reservaOptional = reservaRepositorio.findById(id);
-//            if (reservaOptional.isPresent()) {
-//                Reserva reserva = reservaOptional.get();
-//                List<Hamaca> hamacas = reserva.getHamacas();
-//                if (hamacas != null && !hamacas.isEmpty()) {
-//                    for (Hamaca hamaca : hamacas) {
-//                        hamaca.setReserva(null);
-//                        hamacaRepositorio.save(hamaca);
-//                    }
-//                    // Línea adicional para asegurarse de que se refresca el estado de la entidad antes de eliminar
-//                    reservaRepositorio.flush();
-//                }
-//                reservaRepositorio.delete(reserva);
-//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//            } else {
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
 }
