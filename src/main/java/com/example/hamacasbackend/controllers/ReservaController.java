@@ -49,9 +49,15 @@ public class ReservaController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Reserva>> getAllReservas(@RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha) {
+    public ResponseEntity<List<Reserva>> getAllReservas(@RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha, String nombre, String estado) {
         List<Reserva> reservas;
-        if (fecha != null) {
+        if (estado != null){
+            reservas = reservaRepositorio.findByEstado(estado);
+        }
+        else if (nombre != null) {
+            reservas = reservaRepositorio.findByNombre(nombre);
+        }
+        else if (fecha != null) {
             LocalDateTime startOfDay = fecha.atStartOfDay();
             LocalDateTime endOfDay = fecha.plusDays(1).atStartOfDay();
             reservas = reservaRepositorio.findByFechaReserva(startOfDay, endOfDay);

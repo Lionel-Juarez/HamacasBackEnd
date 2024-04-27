@@ -16,4 +16,10 @@ Spring Data indicando la entidad a la que vamos a acceder y el tipo de dato de l
     @Query("select r from Reserva r where r.fechaReserva >= :start and r.fechaReserva < :end")
     List<Reserva> findByFechaReserva(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
+    @Query("SELECT r FROM Reserva r WHERE LOWER(r.cliente.nombreCompleto) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<Reserva> findByNombre(@Param("nombre") String nombre);
+
+    @Query("SELECT r FROM Reserva r WHERE LOWER(r.estado) LIKE LOWER(CONCAT('%', :estado, '%'))")
+    List<Reserva> findByEstado(@Param("estado") String estado);
+
 }
