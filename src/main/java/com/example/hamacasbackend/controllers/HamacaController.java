@@ -55,6 +55,7 @@ public class HamacaController {
             hamaca.setPrecio(hamacaDetails.getPrecio());
             hamaca.setReservada(hamacaDetails.isReservada());
             hamaca.setOcupada(hamacaDetails.isOcupada());
+            hamaca.setNumeroHamaca(hamacaDetails.getNumeroHamaca());
             if (hamacaDetails.getIdReserva() != null && hamacaDetails.getIdReserva().getIdReserva() != null) {
                 Reserva reserva = reservaRepositorio.findById(hamacaDetails.getIdReserva().getIdReserva())
                         .orElse(new Reserva()); // handle null case or throw

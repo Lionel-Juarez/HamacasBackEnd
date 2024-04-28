@@ -26,11 +26,11 @@ public class Hamaca {
 
     @Transient // Este campo no se almacena en la base de datos, solo se usa para la serialización
     private Long reservaId;
-
     public Long getReservaId() {
         return idReserva != null ? idReserva.getIdReserva() : null;
     }
 
+    private String numeroHamaca; // Añade este campo
     private double precio;
     private boolean reservada;
     private boolean ocupada;
