@@ -3,36 +3,34 @@ package com.example.hamacasbackend.entidades.hamacas;
 import com.example.hamacasbackend.entidades.cliente.Cliente;
 import com.example.hamacasbackend.entidades.reservas.Reserva;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.List;
+
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idHamaca")
 public class Hamaca {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHamaca;
 
-    @ManyToOne
-    @JoinColumn(name = "idReserva", referencedColumnName = "idReserva")
-    @JsonIgnore  // Evita la serialización de esta propiedad
-    private Reserva idReserva;
+    @ManyToMany(mappedBy = "hamacas")
+    private List<Reserva> reservas;
 
-    @Transient // Este campo no se almacena en la base de datos, solo se usa para la serialización
-    private Long reservaId;
-    public Long getReservaId() {
-        return idReserva != null ? idReserva.getIdReserva() : null;
-    }
-
-    private String numeroHamaca; // Añade este campo
+    private String numeroHamaca;
     private double precio;
-    private boolean reservada;
     private boolean ocupada;
-    private int planoId;
 }
