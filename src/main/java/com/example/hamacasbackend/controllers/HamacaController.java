@@ -1,30 +1,22 @@
 package com.example.hamacasbackend.controllers;
 
 import com.example.hamacasbackend.entidades.hamacas.Hamaca;
-import com.example.hamacasbackend.entidades.reportes.Reporte;
 import com.example.hamacasbackend.entidades.reservas.Reserva;
 import com.example.hamacasbackend.repositorios.HamacaRepositorio;
-import com.example.hamacasbackend.repositorios.ReporteRepositorio;
 import com.example.hamacasbackend.repositorios.ReservaRepositorio;
 import jakarta.transaction.Transactional;
-import lombok.extern.java.Log;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/api/hamacas")
