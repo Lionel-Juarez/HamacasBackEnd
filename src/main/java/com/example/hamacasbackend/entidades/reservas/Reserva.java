@@ -46,4 +46,7 @@ public class Reserva {
     @ManyToOne
     @JoinColumn(name = "idUsuario", referencedColumnName = "id")
     private Usuario creadaPor;
+
+    private String lado; // "izquierda" o "derecha"
+
 }

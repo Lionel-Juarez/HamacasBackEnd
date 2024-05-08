@@ -97,7 +97,7 @@ public class HamacaController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
     @PatchMapping("/updateReservaHamaca/{id}")
-    public ResponseEntity<Hamaca> updateHamacaReserva(@PathVariable("id") Long id, @RequestParam("idReserva") Long idReserva) {
+    public ResponseEntity<Hamaca> updateHamacaReserva(@PathVariable("id") Long id, @RequestParam("idReserva") Long idReserva, @RequestParam("lado") String lado) {
         return hamacaRepositorio.findById(id).map(hamaca -> {
             Reserva reserva = reservaRepositorio.findById(idReserva)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva not found"));
@@ -105,11 +105,14 @@ public class HamacaController {
                 hamaca.getReservas().add(reserva);
                 LOGGER.info("Reserva ID {} agregada a hamaca ID {}" + idReserva + id);
 
+                hamaca.setLado(lado); // Establecer el lado de la hamaca con el valor proporcionado desde el frontend
             }
             Hamaca updatedHamaca = hamacaRepositorio.save(hamaca);
             return new ResponseEntity<>(updatedHamaca, HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
 
     @Transactional
     @PatchMapping("/updatePrecioHamacas")

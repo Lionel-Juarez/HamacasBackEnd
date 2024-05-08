@@ -33,4 +33,6 @@ public class Hamaca {
     private String numeroHamaca;
     private double precio;
     private boolean ocupada;
+    private String lado; // "izquierda", "derecha" o "ambas"
+
 }
