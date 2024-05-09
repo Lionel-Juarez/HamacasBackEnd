@@ -1,5 +1,4 @@
 package com.example.hamacasbackend.controllers;
-
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
 import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,4 @@
 package com.example.hamacasbackend.controllers;
-
 import com.example.hamacasbackend.entidades.reportes.Reporte;
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
 import com.example.hamacasbackend.repositorios.ReporteRepositorio;
@@ -33,13 +32,12 @@ public class ReporteController {
     }
 
     @PostMapping("/newReport")
-    public ResponseEntity<Reporte> createReport(@RequestBody Reporte report) {
-        System.out.println("Creating report with data: " + report);
+    public ResponseEntity<Reporte> createReport(@RequestBody Reporte reporte) {
+        System.out.println("Creating reporte with data: " + reporte);
         try {
-            Reporte createdReport = reportRepository.save(report);
+            Reporte createdReport = reportRepository.save(reporte);
             return new ResponseEntity<>(createdReport, HttpStatus.CREATED);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -53,17 +51,17 @@ public class ReporteController {
 
     @PutMapping("/updateReport/{id}")
     public ResponseEntity<Reporte> updateReport(@PathVariable("id") Long id, @RequestBody Reporte reportDetails) {
-        return reportRepository.findById(id).map(report -> {
-            report.setTitulo(reportDetails.getTitulo());
-            report.setEstado(reportDetails.getEstado());
-            report.setComentarioCompleto(reportDetails.getComentarioCompleto());
-            report.setFechaCreacion(reportDetails.getFechaCreacion());
+        return reportRepository.findById(id).map(reporte -> {
+            reporte.setTitulo(reportDetails.getTitulo());
+            reporte.setEstado(reportDetails.getEstado());
+            reporte.setComentarioCompleto(reportDetails.getComentarioCompleto());
+            reporte.setFechaCreacion(reportDetails.getFechaCreacion());
             // Asumiendo que el usuario ya existe y se envía el ID del usuario como referencia
             if (reportDetails.getCreadoPor() != null && reportDetails.getCreadoPor().getId() != null) {
                 Usuario usuario = usuarioRepositorio.findById(reportDetails.getCreadoPor().getId()).orElse(null);
-                report.setCreadoPor(usuario);
+                reporte.setCreadoPor(usuario);
             }
-            Reporte updatedReport = reportRepository.save(report);
+            Reporte updatedReport = reportRepository.save(reporte);
             return new ResponseEntity<>(updatedReport, HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }

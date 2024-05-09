@@ -1,15 +1,12 @@
 package com.example.hamacasbackend.controllers;
-
 import com.example.hamacasbackend.entidades.cliente.Cliente;
-import com.example.hamacasbackend.entidades.hamacas.Hamaca;
-import com.example.hamacasbackend.entidades.reservas.Reserva;
+import com.example.hamacasbackend.entidades.sombrillas.Sombrilla;import com.example.hamacasbackend.entidades.reservas.Reserva;
 import com.example.hamacasbackend.entidades.reservas.ReservaDTO;
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
 import com.example.hamacasbackend.repositorios.ClienteRepositorio;
-import com.example.hamacasbackend.repositorios.HamacaRepositorio;
+import com.example.hamacasbackend.repositorios.SombrillaRepositorio;
 import com.example.hamacasbackend.repositorios.ReservaRepositorio;
 import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
-import org.springframework.dao.DataAccessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +17,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.logging.Logger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @RestController
 @RequestMapping("/api/reservas")
@@ -41,7 +34,7 @@ public class ReservaController {
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
-    private HamacaRepositorio hamacaRepositorio;
+    private SombrillaRepositorio sombrillaRepositorio;
     private static final Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
 
 
@@ -78,12 +71,12 @@ public class ReservaController {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
             Usuario usuario = usuarioRepositorio.findById(reservaDTO.getIdUsuario())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-            List<Hamaca> hamacas = StreamSupport.stream(hamacaRepositorio.findAllById(reservaDTO.getIdHamacas()).spliterator(), false)
+            List<Sombrilla> sombrillas = StreamSupport.stream(sombrillaRepositorio.findAllById(reservaDTO.getIdSombrillas()).spliterator(), false)
                     .collect(Collectors.toList());
 
-            if (hamacas.isEmpty()) {
-                LOGGER.info("No se encontraron hamacas con los IDs proporcionados: {}" + reservaDTO.getIdHamacas());
-                return ResponseEntity.badRequest().body("No se encontraron hamacas con los IDs proporcionados.");
+            if (sombrillas.isEmpty()) {
+                LOGGER.info("No se encontraron sombrillas con los IDs proporcionados: {}" + reservaDTO.getIdSombrillas());
+                return ResponseEntity.badRequest().body("No se encontraron sombrillas con los IDs proporcionados.");
             }
 
             Reserva reserva = new Reserva();
@@ -94,15 +87,15 @@ public class ReservaController {
             reserva.setMetodoPago(reservaDTO.getMetodoPago());
             reserva.setFechaReserva(reservaDTO.getFechaReserva());
             reserva.setFechaPago(reservaDTO.getFechaPago());
-            reserva.setHamacas(hamacas);
-            hamacas.forEach(h -> h.getReservas().add(reserva));
+            reserva.setSombrillas(sombrillas);
+            sombrillas.forEach(h -> h.getReservas().add(reserva));
             reservaRepositorio.save(reserva);
-            hamacaRepositorio.saveAll(hamacas);
+            sombrillaRepositorio.saveAll(sombrillas);
 
 
             reservaRepositorio.save(reserva);
-            hamacaRepositorio.saveAll(hamacas);
-            LOGGER.info("Reserva creada y asociada con hamacas exitosamente. ID de Reserva: {}"+ reserva.getIdReserva());
+            sombrillaRepositorio.saveAll(sombrillas);
+            LOGGER.info("Reserva creada y asociada con sombrillas exitosamente. ID de Reserva: {}"+ reserva.getIdReserva());
             return ResponseEntity.status(HttpStatus.CREATED).body(reserva);
         } catch (DateTimeParseException e) {
             LOGGER.info("Error de formato de fecha al crear reserva" +e);
@@ -132,11 +125,11 @@ public class ReservaController {
             existingReserva.setFechaReserva(reservaDTO.getFechaReserva());
 
 
-            List<Hamaca> updatedHamacas = StreamSupport.stream(hamacaRepositorio.findAllById(reservaDTO.getIdHamacas()).spliterator(), false)
+            List<Sombrilla> updatedSombrillas = StreamSupport.stream(sombrillaRepositorio.findAllById(reservaDTO.getIdSombrillas()).spliterator(), false)
                     .collect(Collectors.toList());
-            existingReserva.getHamacas().clear();
-            existingReserva.setHamacas(updatedHamacas);
-            updatedHamacas.forEach(h -> h.getReservas().add(existingReserva));
+            existingReserva.getSombrillas().clear();
+            existingReserva.setSombrillas(updatedSombrillas);
+            updatedSombrillas.forEach(h -> h.getReservas().add(existingReserva));
 
             reservaRepositorio.save(existingReserva);
             return ResponseEntity.ok(existingReserva);
@@ -144,19 +137,19 @@ public class ReservaController {
     }
 
 
-//    //Añadir funcion eliminarReserva sin eliminar la hamaca
+//    //Añadir funcion eliminarReserva sin eliminar la sombrilla
 //    @DeleteMapping("/eliminarReserva/{id}")
 //    public ResponseEntity<HttpStatus> deleteReserva(@PathVariable("id") Long id) {
 //        try {
 //            Optional<Reserva> reserva = reservaRepositorio.findById(id);
 //            if (reserva.isPresent()) {
 //                Reserva reservaAEliminar = reserva.get();
-//                // Desvincular las hamacas asociadas
-//                for (Hamaca hamaca : reservaAEliminar.getHamacas()) {
-//                    hamaca.setReservas(null);
-//                    hamacaRepositorio.save(hamaca);
+//                // Desvincular las sombrillas asociadas
+//                for (Sombrilla sombrilla : reservaAEliminar.getSombrillas()) {
+//                    sombrilla.setReservas(null);
+//                    sombrillaRepositorio.save(sombrilla);
 //                }
-//                // Ahora que las hamacas están desvinculadas, eliminamos la reserva
+//                // Ahora que las sombrillas están desvinculadas, eliminamos la reserva
 //                reservaRepositorio.delete(reservaAEliminar);
 //                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 //            } else {

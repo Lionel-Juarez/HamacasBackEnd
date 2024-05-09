@@ -17,7 +17,7 @@ public class Plano {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPlano;
 
-    private int cantidadHamacas;
+    private int cantidadSombrillas;
 
     private String distribucion;
 }
