@@ -32,11 +32,16 @@ public class Reserva {
     private String estado;
     private boolean pagada;
     private String metodoPago;
+    private String horaLlegada;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fechaReserva;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fechaPago;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime fechaReservaRealizada;
 
     @ManyToOne
     @JoinColumn(name = "idCliente", referencedColumnName = "idCliente")
