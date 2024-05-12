@@ -37,12 +37,6 @@ public class ReservaController {
     private SombrillaRepositorio sombrillaRepositorio;
     private static final Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
 
-
-    @Autowired
-    public ReservaController(ReservaRepositorio reservaRepositorio) {
-        this.reservaRepositorio = reservaRepositorio;
-    }
-
     @GetMapping("/")
     public ResponseEntity<List<Reserva>> getAllReservas(@RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha, String nombre, String estado) {
         List<Reserva> reservas;
@@ -85,6 +79,8 @@ public class ReservaController {
             reserva.setEstado(reservaDTO.getEstado());
             reserva.setPagada(reservaDTO.isPagada());
             reserva.setMetodoPago(reservaDTO.getMetodoPago());
+            reserva.setCantidadHamacas(reservaDTO.getCantidadHamacas());
+            reserva.setHoraLlegada(reservaDTO.getHoraLlegada());
             reserva.setFechaReserva(reservaDTO.getFechaReserva());
             reserva.setFechaPago(reservaDTO.getFechaPago());
             reserva.setSombrillas(sombrillas);
@@ -123,6 +119,7 @@ public class ReservaController {
             existingReserva.setMetodoPago(reservaDTO.getMetodoPago());
             existingReserva.setFechaPago(reservaDTO.getFechaPago());
             existingReserva.setFechaReserva(reservaDTO.getFechaReserva());
+            existingReserva.setFechaReservaRealizada(reservaDTO.getFechaReservaRealizada());
 
 
             List<Sombrilla> updatedSombrillas = StreamSupport.stream(sombrillaRepositorio.findAllById(reservaDTO.getIdSombrillas()).spliterator(), false)

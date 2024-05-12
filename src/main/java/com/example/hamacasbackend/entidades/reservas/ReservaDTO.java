@@ -15,6 +15,7 @@ public class ReservaDTO {
     private String estado;
     private boolean pagada;
     private String metodoPago;
+    private String horaLlegada;
     private String cantidadHamacas;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -24,6 +25,6 @@ public class ReservaDTO {
     private LocalDateTime fechaPago; // Fecha y hora del pago de la reserva
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime fechaRealizada; //
+    private LocalDateTime fechaReservaRealizada; //
 
 }
