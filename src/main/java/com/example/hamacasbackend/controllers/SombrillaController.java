@@ -72,6 +72,7 @@ public class SombrillaController {
             sombrilla.setPrecio(sombrillaDetails.getPrecio());
             sombrilla.setOcupada(sombrillaDetails.isOcupada());
             sombrilla.setNumeroSombrilla(sombrillaDetails.getNumeroSombrilla());
+            sombrilla.setCantidadHamacas(sombrillaDetails.getCantidadHamacas());
             if (sombrillaDetails.getReservas() != null && !sombrillaDetails.getReservas().isEmpty()) {
                 List<Long> reservaIds = sombrillaDetails.getReservas().stream().map(Reserva::getIdReserva).collect(Collectors.toList());
                 List<Reserva> reservas = new ArrayList<>();
@@ -85,8 +86,8 @@ public class SombrillaController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
     @PatchMapping("/updateReservaSombrilla/{id}")
-    public ResponseEntity<?> updateSombrillaReserva(@PathVariable("id") Long id, @RequestParam("idReserva") Long idReserva) {
-        LOGGER.info("Intentando actualizar sombrilla ID " + id + " con reserva ID " + idReserva + " y cantidadHamacas ");
+    public ResponseEntity<?> updateSombrillaReserva(@PathVariable("id") Long id, @RequestParam("idReserva") Long idReserva, @RequestParam("cantidadHamacas") String cantidadHamacas) {
+        LOGGER.info("Intentando actualizar sombrilla ID " + id + " con reserva ID " + idReserva + " y cantidadHamacas " + cantidadHamacas);
         return sombrillaRepositorio.findById(id).map(sombrilla -> {
             Reserva reserva = reservaRepositorio.findById(idReserva)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva not found"));
@@ -94,8 +95,9 @@ public class SombrillaController {
                 sombrilla.getReservas().add(reserva);
                 LOGGER.info("Reserva ID " + idReserva + " agregada a sombrilla ID " + id);
             }
+            sombrilla.setCantidadHamacas(cantidadHamacas);
             sombrillaRepositorio.save(sombrilla);
-            LOGGER.info("Sombrilla ID " + id + " actualizada con el cantidadHamacas " );
+            LOGGER.info("Sombrilla ID " + id + " actualizada con el cantidadHamacas " + cantidadHamacas);
             return ResponseEntity.ok(sombrilla);
         }).orElseGet(() -> {
             LOGGER.info("No se encontró sombrilla con ID " + id);

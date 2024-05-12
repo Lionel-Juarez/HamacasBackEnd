@@ -79,18 +79,16 @@ public class ReservaController {
             reserva.setEstado(reservaDTO.getEstado());
             reserva.setPagada(reservaDTO.isPagada());
             reserva.setMetodoPago(reservaDTO.getMetodoPago());
-            reserva.setCantidadHamacas(reservaDTO.getCantidadHamacas());
             reserva.setHoraLlegada(reservaDTO.getHoraLlegada());
             reserva.setFechaReserva(reservaDTO.getFechaReserva());
+            reserva.setFechaReservaRealizada(reservaDTO.getFechaReservaRealizada());
             reserva.setFechaPago(reservaDTO.getFechaPago());
             reserva.setSombrillas(sombrillas);
             sombrillas.forEach(h -> h.getReservas().add(reserva));
-            reservaRepositorio.save(reserva);
-            sombrillaRepositorio.saveAll(sombrillas);
-
 
             reservaRepositorio.save(reserva);
             sombrillaRepositorio.saveAll(sombrillas);
+
             LOGGER.info("Reserva creada y asociada con sombrillas exitosamente. ID de Reserva: {}"+ reserva.getIdReserva());
             return ResponseEntity.status(HttpStatus.CREATED).body(reserva);
         } catch (DateTimeParseException e) {
