@@ -18,17 +18,19 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.security:spring-security-config")
+    implementation("org.springframework.security:spring-security-core")
+    implementation("com.google.firebase:firebase-admin:8.0.1")
+    compileOnly("org.projectlombok:lombok:1.18.24")
+    annotationProcessor("org.projectlombok:lombok:1.18.24")
     runtimeOnly("com.mysql:mysql-connector-j")
-    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    compileOnly ("org.projectlombok:lombok:1.18.24")
-    annotationProcessor ("org.projectlombok:lombok:1.18.24")
-//    implementation ("org.slf4j:slf4j-api:1.7.30")
-//    implementation ("ch.qos.logback:logback-classic:1.2.3")
-
-
+    testImplementation("org.springframework.security:spring-security-test")
+    implementation("javax.servlet:javax.servlet-api:4.0.1")
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:deprecation")
 }

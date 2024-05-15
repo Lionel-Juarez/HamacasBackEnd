@@ -1,7 +1,7 @@
 package com.example.hamacasbackend.controllers;
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
+import com.example.hamacasbackend.service.UsuarioService;
 import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,18 @@ import java.util.Optional;
 @RequestMapping("/api/usuarios") // Cambiado para reflejar el enfoque en usuarios
 public class UsuarioController {
     private final UsuarioRepositorio usuarioRepositorio;
+    private final UsuarioService usuarioService;
 
-    @Autowired
-    public UsuarioController(UsuarioRepositorio usuarioRepositorio) {
+    public UsuarioController(UsuarioService usuarioService, UsuarioRepositorio usuarioRepositorio) {
+        this.usuarioService = usuarioService;
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody Usuario usuario) {
+        Usuario savedUsuario = usuarioService.saveUser(usuario);
+        return ResponseEntity.ok(savedUsuario);
+    }
     @GetMapping("/")
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();

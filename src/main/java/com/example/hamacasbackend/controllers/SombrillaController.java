@@ -18,34 +18,34 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/api/sombrillas")
-public class SombrillaController {
+    @RestController
+    @RequestMapping("/api/sombrillas")
+    public class SombrillaController {
 
-    private static final java.util.logging.Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
+        private static final java.util.logging.Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
 
-    private final SombrillaRepositorio sombrillaRepositorio;
-    @Autowired
-    private ReservaRepositorio reservaRepositorio;
-    @Autowired
-    public SombrillaController(SombrillaRepositorio sombrillaRepositorio) {
-        this.sombrillaRepositorio = sombrillaRepositorio;
-    }
-
-    @GetMapping("/sombrillas")
-    public ResponseEntity<List<Sombrilla>> getAllSombrillas() {
-        LOGGER.info("Iniciando la carga de todas las sombrillas.");
-        List<Sombrilla> sombrillas = new ArrayList<>();
-        for (Sombrilla sombrilla : sombrillaRepositorio.findAll()) {
-            sombrillas.add(sombrilla);
+        private final SombrillaRepositorio sombrillaRepositorio;
+        @Autowired
+        private ReservaRepositorio reservaRepositorio;
+        @Autowired
+        public SombrillaController(SombrillaRepositorio sombrillaRepositorio) {
+            this.sombrillaRepositorio = sombrillaRepositorio;
         }
 
-        if (sombrillas.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(sombrillas);
+        @GetMapping("/sombrillas")
+        public ResponseEntity<List<Sombrilla>> getAllSombrillas() {
+            LOGGER.info("Iniciando la carga de todas las sombrillas.");
+            List<Sombrilla> sombrillas = new ArrayList<>();
+            for (Sombrilla sombrilla : sombrillaRepositorio.findAll()) {
+                sombrillas.add(sombrilla);
+            }
+
+            if (sombrillas.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(sombrillas);
+            }
         }
-    }
 
 
     @PostMapping("/nuevaSombrilla")
@@ -104,9 +104,6 @@ public class SombrillaController {
             return ResponseEntity.notFound().build();
         });
     }
-
-
-
 
 
     @Transactional
