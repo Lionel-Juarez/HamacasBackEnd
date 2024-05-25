@@ -38,23 +38,24 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getClienteById(@PathVariable("id") Long id) { // Cambiado de int a Long
+    public ResponseEntity<Cliente> getClienteById(@PathVariable("id") Long id) {
         Optional<Cliente> clienteFound = clienteRepositorio.findById(id);
         return clienteFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/actualizarCliente/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable("id") Long id, @RequestBody Cliente clienteDetails) { // Cambiado de int a Long
+    public ResponseEntity<Cliente> updateCliente(@PathVariable("id") Long id, @RequestBody Cliente clienteDetails) {
         return clienteRepositorio.findById(id).map(cliente -> {
             cliente.setNombreCompleto(clienteDetails.getNombreCompleto());
             cliente.setNumeroTelefono(clienteDetails.getNumeroTelefono());
+            cliente.setEmail(clienteDetails.getEmail());
             Cliente updatedCliente = clienteRepositorio.save(cliente);
             return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/eliminarCliente/{id}")
-    public ResponseEntity<HttpStatus> deleteCliente(@PathVariable("id") Long id) { // Cambiado de int a Long
+    public ResponseEntity<HttpStatus> deleteCliente(@PathVariable("id") Long id) {
         try {
             clienteRepositorio.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

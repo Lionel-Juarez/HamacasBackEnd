@@ -20,4 +20,5 @@ public class Cliente {
     private String nombreCompleto;
 
     private String numeroTelefono;
+    private String email;
 }
