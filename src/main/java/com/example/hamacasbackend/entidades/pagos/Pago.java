@@ -22,7 +22,7 @@ public class Pago {
     private Long idPago;
 
     @ManyToOne
-//    @JoinColumn(name = "idReserva", referencedColumnName = "idReserva")
+    @JoinColumn(name = "idReserva", referencedColumnName = "idReserva")
     private Reserva reserva;
 
     private double cantidad;
