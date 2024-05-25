@@ -11,8 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface PagoRepositorio extends CrudRepository<Pago, Long> {
-
-
     @Query("SELECT p FROM Pago p WHERE FUNCTION('DATE', p.fechaPago) = :fecha")
     Page<Pago> findByFechaPago(@Param("fecha") LocalDate fecha, Pageable pageable);
 
