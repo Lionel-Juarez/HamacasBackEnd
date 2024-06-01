@@ -130,28 +130,4 @@ public class ReservaController {
             return ResponseEntity.ok(existingReserva);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-
-//    //Añadir funcion eliminarReserva sin eliminar la sombrilla
-//    @DeleteMapping("/eliminarReserva/{id}")
-//    public ResponseEntity<HttpStatus> deleteReserva(@PathVariable("id") Long id) {
-//        try {
-//            Optional<Reserva> reserva = reservaRepositorio.findById(id);
-//            if (reserva.isPresent()) {
-//                Reserva reservaAEliminar = reserva.get();
-//                // Desvincular las sombrillas asociadas
-//                for (Sombrilla sombrilla : reservaAEliminar.getSombrillas()) {
-//                    sombrilla.setReservas(null);
-//                    sombrillaRepositorio.save(sombrilla);
-//                }
-//                // Ahora que las sombrillas están desvinculadas, eliminamos la reserva
-//                reservaRepositorio.delete(reservaAEliminar);
-//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//            } else {
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 }

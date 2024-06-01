@@ -1,12 +1,14 @@
 package com.example.hamacasbackend.entidades.reservas;
 
 import com.example.hamacasbackend.entidades.cliente.Cliente;
-import com.example.hamacasbackend.entidades.sombrillas.Sombrilla;import com.example.hamacasbackend.entidades.usuarios.Usuario;
+import com.example.hamacasbackend.entidades.sombrillas.Sombrilla;
+import com.example.hamacasbackend.entidades.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

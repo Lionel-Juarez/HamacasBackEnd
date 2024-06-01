@@ -29,14 +29,15 @@ public class PagoController {
     private ReservaRepositorio reservaRepositorio;
 
     @GetMapping
-    public ResponseEntity<List<Pago>> getAllPagos(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha,
-                                                  @RequestParam(required = false) Integer mes,
-                                                  @RequestParam(required = false) Integer ano,
-                                                  @RequestParam(required = false) String metodoPago,
-                                                  @RequestParam(required = false) Boolean pagado,
-                                                  @RequestParam(required = false) String tipoHamaca,
-                                                  @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<Pago>> getAllPagos(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha,
+            @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer ano,
+            @RequestParam(required = false) String metodoPago,
+            @RequestParam(required = false) Boolean pagado,
+            @RequestParam(required = false) String tipoHamaca,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         List<Pago> pagos;
 

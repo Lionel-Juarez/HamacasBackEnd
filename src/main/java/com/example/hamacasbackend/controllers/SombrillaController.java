@@ -18,34 +18,36 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-    @RestController
-    @RequestMapping("/api/sombrillas")
-    public class SombrillaController {
+@RestController
+@RequestMapping("/api/sombrillas")
+public class SombrillaController {
 
-        private static final java.util.logging.Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
+    private static final java.util.logging.Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
 
-        private final SombrillaRepositorio sombrillaRepositorio;
-        @Autowired
-        private ReservaRepositorio reservaRepositorio;
-        @Autowired
-        public SombrillaController(SombrillaRepositorio sombrillaRepositorio) {
-            this.sombrillaRepositorio = sombrillaRepositorio;
+    private final SombrillaRepositorio sombrillaRepositorio;
+    @Autowired
+    private ReservaRepositorio reservaRepositorio;
+
+    @Autowired
+    public SombrillaController(SombrillaRepositorio sombrillaRepositorio) {
+        this.sombrillaRepositorio = sombrillaRepositorio;
+    }
+
+    @GetMapping("/sombrillas")
+    public ResponseEntity<List<Sombrilla>> getAllSombrillas() {
+        LOGGER.info("Iniciando la carga de todas las sombrillas.");
+        List<Sombrilla> sombrillas = new ArrayList<>();
+        for (Sombrilla sombrilla : sombrillaRepositorio.findAll()) {
+            sombrillas.add(sombrilla);
         }
 
-        @GetMapping("/sombrillas")
-        public ResponseEntity<List<Sombrilla>> getAllSombrillas() {
-            LOGGER.info("Iniciando la carga de todas las sombrillas.");
-            List<Sombrilla> sombrillas = new ArrayList<>();
-            for (Sombrilla sombrilla : sombrillaRepositorio.findAll()) {
-                sombrillas.add(sombrilla);
-            }
-
-            if (sombrillas.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.ok(sombrillas);
-            }
+        if (sombrillas.isEmpty()) {
+            LOGGER.info("No se encontraron sombrillas disponibles.");
+            return ResponseEntity.noContent().build(); // Retornar estado 204 No Content
+        } else {
+            return ResponseEntity.ok(sombrillas);
         }
+    }
 
 
     @PostMapping("/nuevaSombrilla")
@@ -74,7 +76,7 @@ import java.util.stream.Collectors;
             sombrilla.setNumeroSombrilla(sombrillaDetails.getNumeroSombrilla());
             sombrilla.setCantidadHamacas(sombrillaDetails.getCantidadHamacas());
             if (sombrillaDetails.getReservas() != null && !sombrillaDetails.getReservas().isEmpty()) {
-                List<Long> reservaIds = sombrillaDetails.getReservas().stream().map(Reserva::getIdReserva).collect(Collectors.toList());
+                List<Long> reservaIds = sombrillaDetails.getReservas().stream().map(Reserva::getIdReserva).toList();
                 List<Reserva> reservas = new ArrayList<>();
                 for (Long reservaId : reservaIds) {
                     reservaRepositorio.findById(reservaId).ifPresent(reservas::add);
@@ -85,6 +87,7 @@ import java.util.stream.Collectors;
             return new ResponseEntity<>(sombrillaRepositorio.save(sombrilla), HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @PatchMapping("/updateReservaSombrilla/{id}")
     public ResponseEntity<?> updateSombrillaReserva(@PathVariable("id") Long id, @RequestParam("idReserva") Long idReserva, @RequestParam("cantidadHamacas") String cantidadHamacas) {
         LOGGER.info("Intentando actualizar sombrilla ID " + id + " con reserva ID " + idReserva + " y cantidadHamacas " + cantidadHamacas);
@@ -113,26 +116,14 @@ import java.util.stream.Collectors;
             List<Integer> ids = (List<Integer>) updateRequest.get("ids");
             double precio = (Double) updateRequest.get("precio");
             List<Sombrilla> updatedSombrillas = new ArrayList<>();
-            ids.forEach(id -> {
-                sombrillaRepositorio.findById(Long.valueOf(id)).ifPresent(sombrilla -> {
-                    sombrilla.setPrecio(precio);
-                    sombrillaRepositorio.save(sombrilla);
-                    updatedSombrillas.add(sombrilla);
-                });
-            });
+            ids.forEach(id -> sombrillaRepositorio.findById(Long.valueOf(id)).ifPresent(sombrilla -> {
+                sombrilla.setPrecio(precio);
+                sombrillaRepositorio.save(sombrilla);
+                updatedSombrillas.add(sombrilla);
+            }));
             return ResponseEntity.ok(updatedSombrillas);
         } catch (ClassCastException | NullPointerException e) {
             return ResponseEntity.badRequest().body("Invalid request data");
-        }
-    }
-
-    @DeleteMapping("/deleteSombrilla/{id}")
-    public ResponseEntity<HttpStatus> deleteSombrilla(@PathVariable("id") Long id) {
-        try {
-            sombrillaRepositorio.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

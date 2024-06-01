@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,6 +31,6 @@ public class Reporte {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime fechaCreacion;
     @ManyToOne
-    @JoinColumn(name = "created_by_usuario_id", referencedColumnName = "id") // Ajustado para referenciar el nuevo ID
+    @JoinColumn(name = "created_by_usuario_id", referencedColumnName = "id")
     private Usuario creadoPor;
 }
