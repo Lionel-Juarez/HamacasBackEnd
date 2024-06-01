@@ -4,6 +4,9 @@ import com.example.hamacasbackend.entidades.usuarios.Usuario;
 import com.example.hamacasbackend.repositorios.ReporteRepositorio;
 import com.example.hamacasbackend.repositorios.UsuarioRepositorio; // Asumiendo que tienes un repositorio para Usuario
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +28,14 @@ public class ReporteController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Reporte>> getAllReports(){
-        List<Reporte> reports = new ArrayList<>();
-        reportRepository.findAll().forEach(reports::add);
-        return ResponseEntity.ok(reports);
+    public ResponseEntity<Page<Reporte>> getAllReports(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Reporte> reportPage = reportRepository.findAll(pageable);
+        return new ResponseEntity<>(reportPage, HttpStatus.OK);
     }
+
 
     @PostMapping("/newReport")
     public ResponseEntity<Reporte> createReport(@RequestBody Reporte reporte) {
