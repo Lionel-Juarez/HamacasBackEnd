@@ -1,6 +1,5 @@
 package com.example.hamacasbackend.controllers;
 import com.example.hamacasbackend.entidades.usuarios.Usuario;
-import com.example.hamacasbackend.service.UsuarioService;
 import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,21 +10,24 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/usuarios") // Cambiado para reflejar el enfoque en usuarios
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
     private final UsuarioRepositorio usuarioRepositorio;
-    private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService, UsuarioRepositorio usuarioRepositorio) {
-        this.usuarioService = usuarioService;
+    public UsuarioController(UsuarioRepositorio usuarioRepositorio) {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody Usuario usuario) {
-        Usuario savedUsuario = usuarioService.saveUser(usuario);
-        return ResponseEntity.ok(savedUsuario);
+    public ResponseEntity<Usuario> registerUser(@RequestBody Usuario usuario) {
+        try {
+            Usuario savedUsuario = usuarioRepositorio.save(usuario);
+            return ResponseEntity.ok(savedUsuario);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
+
     @GetMapping("/")
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
@@ -52,8 +54,10 @@ public class UsuarioController {
     @PutMapping("/actualizarUsuario/{id}")
     public ResponseEntity<Usuario> updateUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuarioDetails) {
         return usuarioRepositorio.findById(id).map(usuario -> {
-            usuario.setNombreUsuario(usuarioDetails.getNombreUsuario());
-            usuario.setPassword(usuarioDetails.getPassword());
+            usuario.setUsername(usuarioDetails.getUsername());
+            usuario.setNombreCompleto(usuarioDetails.getNombreCompleto());
+            usuario.setEmail(usuarioDetails.getEmail());
+            usuario.setTelefono(usuarioDetails.getTelefono());
             usuario.setRol(usuarioDetails.getRol());
             Usuario updatedUsuario = usuarioRepositorio.save(usuario);
             return new ResponseEntity<>(updatedUsuario, HttpStatus.OK);

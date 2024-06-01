@@ -1,6 +1,5 @@
 package com.example.hamacasbackend.entidades.usuarios;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +16,11 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // ID autoincremental
 
-    private String nombreUsuario;
-    private String password;
+    private String uid; // UID de Firebase
+    private String username;
+    private String nombreCompleto;
+    private String email;
+    private String telefono;
     private String rol;
 }
+

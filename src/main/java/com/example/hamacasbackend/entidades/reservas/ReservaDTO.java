@@ -11,7 +11,7 @@ public class ReservaDTO {
     private Long idReserva; // Agregado para permitir fácil identificación y manipulación de reservas
     private List<Long> idSombrillas; // Lista de IDs de Sombrillas
     private Long idCliente;
-    private Long idUsuario;
+    private String uid;
     private String estado;
     private boolean pagada;
     private String metodoPago;

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sombrillas")
@@ -113,7 +112,7 @@ public class SombrillaController {
     @PatchMapping("/updatePrecioSombrillas")
     public ResponseEntity<?> updatePrecioSombrillas(@RequestBody Map<String, Object> updateRequest) {
         try {
-            List<Integer> ids = (List<Integer>) updateRequest.get("ids");
+            List<Integer> ids = convertToListOfIntegers(updateRequest.get("ids"));
             double precio = (Double) updateRequest.get("precio");
             List<Sombrilla> updatedSombrillas = new ArrayList<>();
             ids.forEach(id -> sombrillaRepositorio.findById(Long.valueOf(id)).ifPresent(sombrilla -> {
@@ -126,4 +125,22 @@ public class SombrillaController {
             return ResponseEntity.badRequest().body("Invalid request data");
         }
     }
+
+    private List<Integer> convertToListOfIntegers(Object obj) {
+        if (obj instanceof List<?> list) {
+            List<Integer> result = new ArrayList<>();
+            for (Object element : list) {
+                if (element instanceof Integer) {
+                    result.add((Integer) element);
+                } else {
+                    throw new ClassCastException("Expected a list of integers");
+                }
+            }
+            return result;
+        } else {
+            throw new ClassCastException("Expected a list");
+        }
+    }
+
+
 }

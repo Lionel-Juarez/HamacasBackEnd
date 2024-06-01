@@ -57,13 +57,14 @@ public class ReservaController {
         }
         return new ResponseEntity<>(reservas, HttpStatus.OK);
     }
+
     @PostMapping("/nuevaReserva")
     @Transactional
     public ResponseEntity<?> createReserva(@RequestBody ReservaDTO reservaDTO) {
         try {
             Cliente cliente = clienteRepositorio.findById(reservaDTO.getIdCliente())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
-            Usuario usuario = usuarioRepositorio.findById(reservaDTO.getIdUsuario())
+            Usuario usuario = usuarioRepositorio.findByUid(reservaDTO.getUid())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
             List<Sombrilla> sombrillas = StreamSupport.stream(sombrillaRepositorio.findAllById(reservaDTO.getIdSombrillas()).spliterator(), false)
                     .collect(Collectors.toList());
@@ -111,7 +112,7 @@ public class ReservaController {
     public ResponseEntity<?> updateReserva(@PathVariable Long id, @RequestBody ReservaDTO reservaDTO) {
         return reservaRepositorio.findById(id).map(existingReserva -> {
             existingReserva.setCliente(clienteRepositorio.findById(reservaDTO.getIdCliente()).orElse(null));
-            existingReserva.setCreadaPor(usuarioRepositorio.findById(reservaDTO.getIdUsuario()).orElse(null));
+            existingReserva.setCreadaPor(usuarioRepositorio.findById(Long.valueOf(reservaDTO.getUid())).orElse(null));
             existingReserva.setEstado(reservaDTO.getEstado());
             existingReserva.setPagada(reservaDTO.isPagada());
             existingReserva.setMetodoPago(reservaDTO.getMetodoPago());

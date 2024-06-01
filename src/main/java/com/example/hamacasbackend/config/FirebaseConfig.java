@@ -21,7 +21,7 @@ public class FirebaseConfig {
             throw new FileNotFoundException("serviceAccountKey.json not found in classpath");
         }
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
+        FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
 
@@ -30,3 +30,4 @@ public class FirebaseConfig {
         }
     }
 }
+
