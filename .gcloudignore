@@ -1,0 +1,68 @@
+# This file specifies files that are *not* uploaded to Google Cloud Platform
+# using gcloud. It follows the same syntax as .gitignore, with the addition
+# of the `!` negation operator (which flips the meaning of an entry).
+
+# .git and other VCS directories.
+.git
+.hg
+.svn
+
+# Cloud SDK configuration files.
+gcloudignore
+*.gcloudignore
+
+# Python pycache
+__pycache__
+*.py[cod]
+
+# Node.js dependencies
+node_modules/
+*.log
+
+# Java dependencies and build directories
+**/target/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# Maven wrapper files and directories
+.mvn/
+mvnw
+mvnw.cmd
+
+# Temporary files
+*.swp
+*.temp
+*.tmp
+*.bak
+*.backup
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Exclude binary files
+*.dll
+*.exe
+*.o
+*.so
+
+# Exclude large files
+*.iso
+*.tar
+*.zip
+*.gz
+
+# Exclude operating system files
+.DS_Store
+Thumbs.db
+
+# Exclude archives
+*.tar.gz
+*.tgz
+
+# Include essential build files
+!build.gradle
+!settings.gradle
+!gradlew
+!gradlew.bat
