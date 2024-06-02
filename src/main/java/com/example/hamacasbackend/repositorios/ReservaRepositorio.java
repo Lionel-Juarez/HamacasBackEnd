@@ -20,5 +20,11 @@ public interface ReservaRepositorio extends CrudRepository<Reserva, Long> {
 
     @Query("SELECT r FROM Reserva r WHERE LOWER(r.estado) LIKE LOWER(CONCAT('%', :estado, '%'))")
     List<Reserva> findByEstado(@Param("estado") String estado);
+
+    @Query("SELECT r FROM Reserva r WHERE r.fechaReserva >= :start AND r.fechaReserva < :end AND LOWER(r.estado) = LOWER(:estado)")
+    List<Reserva> findByFechaReservaAndEstado(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("estado") String estado);
 }
+
+
+
 

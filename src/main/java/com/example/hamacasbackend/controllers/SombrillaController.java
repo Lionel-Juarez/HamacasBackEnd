@@ -72,6 +72,7 @@ public class SombrillaController {
         return sombrillaRepositorio.findById(id).map(sombrilla -> {
             sombrilla.setPrecio(sombrillaDetails.getPrecio());
             sombrilla.setOcupada(sombrillaDetails.isOcupada());
+            sombrilla.setReservada(sombrillaDetails.isReservada());
             sombrilla.setNumeroSombrilla(sombrillaDetails.getNumeroSombrilla());
             sombrilla.setCantidadHamacas(sombrillaDetails.getCantidadHamacas());
             if (sombrillaDetails.getReservas() != null && !sombrillaDetails.getReservas().isEmpty()) {
@@ -81,11 +82,11 @@ public class SombrillaController {
                     reservaRepositorio.findById(reservaId).ifPresent(reservas::add);
                 }
                 sombrilla.setReservas(reservas);
-                sombrilla.setReservas(reservas);
             }
             return new ResponseEntity<>(sombrillaRepositorio.save(sombrilla), HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     @PatchMapping("/updateReservaSombrilla/{id}")
     public ResponseEntity<?> updateSombrillaReserva(@PathVariable("id") Long id, @RequestParam("idReserva") Long idReserva, @RequestParam("cantidadHamacas") String cantidadHamacas) {
@@ -98,6 +99,7 @@ public class SombrillaController {
                 LOGGER.info("Reserva ID " + idReserva + " agregada a sombrilla ID " + id);
             }
             sombrilla.setCantidadHamacas(cantidadHamacas);
+            sombrilla.setReservada(true);
             sombrillaRepositorio.save(sombrilla);
             LOGGER.info("Sombrilla ID " + id + " actualizada con el cantidadHamacas " + cantidadHamacas);
             return ResponseEntity.ok(sombrilla);
@@ -141,6 +143,4 @@ public class SombrillaController {
             throw new ClassCastException("Expected a list");
         }
     }
-
-
 }

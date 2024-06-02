@@ -38,15 +38,13 @@ public class ReservaController {
     private static final Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
 
     @GetMapping("/")
-    public ResponseEntity<List<Reserva>> getAllReservas(@RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha, String nombre, String estado) {
+    public ResponseEntity<List<Reserva>> getAllReservas(@RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha, @RequestParam(required = false) String nombre, @RequestParam(required = false) String estado) {
         List<Reserva> reservas;
-        if (estado != null){
+        if (estado != null) {
             reservas = reservaRepositorio.findByEstado(estado);
-        }
-        else if (nombre != null) {
+        } else if (nombre != null) {
             reservas = reservaRepositorio.findByNombre(nombre);
-        }
-        else if (fecha != null) {
+        } else if (fecha != null) {
             LocalDateTime startOfDay = fecha.atStartOfDay();
             LocalDateTime endOfDay = fecha.plusDays(1).atStartOfDay();
             reservas = reservaRepositorio.findByFechaReserva(startOfDay, endOfDay);
@@ -55,6 +53,17 @@ public class ReservaController {
             reservas = StreamSupport.stream(result.spliterator(), false)
                     .collect(Collectors.toList());
         }
+        return new ResponseEntity<>(reservas, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/fecha-estado")
+    public ResponseEntity<List<Reserva>> getReservasByFechaAndEstado(
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha,
+            @RequestParam String estado) {
+        LocalDateTime startOfDay = fecha.atStartOfDay();
+        LocalDateTime endOfDay = fecha.plusDays(1).atStartOfDay();
+        List<Reserva> reservas = reservaRepositorio.findByFechaReservaAndEstado(startOfDay, endOfDay, estado);
         return new ResponseEntity<>(reservas, HttpStatus.OK);
     }
 
@@ -111,24 +120,20 @@ public class ReservaController {
     @PutMapping("/actualizarReserva/{id}")
     public ResponseEntity<?> updateReserva(@PathVariable Long id, @RequestBody ReservaDTO reservaDTO) {
         return reservaRepositorio.findById(id).map(existingReserva -> {
-            existingReserva.setCliente(clienteRepositorio.findById(reservaDTO.getIdCliente()).orElse(null));
-            existingReserva.setCreadaPor(usuarioRepositorio.findById(Long.valueOf(reservaDTO.getUid())).orElse(null));
-            existingReserva.setEstado(reservaDTO.getEstado());
             existingReserva.setPagada(reservaDTO.isPagada());
             existingReserva.setMetodoPago(reservaDTO.getMetodoPago());
             existingReserva.setFechaPago(reservaDTO.getFechaPago());
-            existingReserva.setFechaReserva(reservaDTO.getFechaReserva());
-            existingReserva.setFechaReservaRealizada(reservaDTO.getFechaReservaRealizada());
 
-
-            List<Sombrilla> updatedSombrillas = StreamSupport.stream(sombrillaRepositorio.findAllById(reservaDTO.getIdSombrillas()).spliterator(), false)
-                    .collect(Collectors.toList());
-            existingReserva.getSombrillas().clear();
-            existingReserva.setSombrillas(updatedSombrillas);
-            updatedSombrillas.forEach(h -> h.getReservas().add(existingReserva));
+            List<Sombrilla> sombrillas = existingReserva.getSombrillas();
+            for (Sombrilla sombrilla : sombrillas) {
+                sombrilla.setReservada(false);
+                sombrilla.setOcupada(true);
+            }
 
             reservaRepositorio.save(existingReserva);
+            sombrillaRepositorio.saveAll(sombrillas);
             return ResponseEntity.ok(existingReserva);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 }
