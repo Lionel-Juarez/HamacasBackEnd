@@ -21,5 +21,6 @@ public class Cliente {
     private String numeroTelefono;
     private String email;
     private String rol;
+    private String uid;
 
 }
