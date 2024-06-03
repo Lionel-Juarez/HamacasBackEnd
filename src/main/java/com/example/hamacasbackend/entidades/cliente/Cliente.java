@@ -18,7 +18,8 @@ public class Cliente {
     private Long idCliente;
 
     private String nombreCompleto;
-
     private String numeroTelefono;
     private String email;
+    private String rol;
+
 }

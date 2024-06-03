@@ -42,7 +42,7 @@ public class SombrillaController {
 
         if (sombrillas.isEmpty()) {
             LOGGER.info("No se encontraron sombrillas disponibles.");
-            return ResponseEntity.noContent().build(); // Retornar estado 204 No Content
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(sombrillas);
         }
