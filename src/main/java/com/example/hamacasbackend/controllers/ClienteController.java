@@ -28,6 +28,12 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
+    @GetMapping("uid/{uid}")
+    public ResponseEntity<Cliente> getClienteByUid(@PathVariable("uid") String uid) {
+        Optional<Cliente> clienteFound = clienteRepositorio.findByUid(uid);
+        return clienteFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/nuevoCliente")
     public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
         try {
