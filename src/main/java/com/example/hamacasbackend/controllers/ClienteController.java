@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,10 +22,10 @@ public class ClienteController {
 
     @GetMapping("/")
     public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = new ArrayList<>();
-        clienteRepositorio.findAll().forEach(clientes::add);
+        List<Cliente> clientes = clienteRepositorio.findByRolOrderByNombreCompletoAsc("CLIENTE");
         return ResponseEntity.ok(clientes);
     }
+
 
     @GetMapping("uid/{uid}")
     public ResponseEntity<Cliente> getClienteByUid(@PathVariable("uid") String uid) {

@@ -94,6 +94,7 @@ public class ReservaController {
             reserva.setFechaReservaRealizada(reservaDTO.getFechaReservaRealizada());
             reserva.setFechaPago(reservaDTO.getFechaPago());
             reserva.setSombrillas(sombrillas);
+            reserva.setNombreUsuario(reservaDTO.getNombreUsuario());
             sombrillas.forEach(h -> h.getReservas().add(reserva));
 
             reservaRepositorio.save(reserva);
