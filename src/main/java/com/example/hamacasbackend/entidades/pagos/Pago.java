@@ -25,14 +25,12 @@ public class Pago {
     @JoinColumn(name = "idReserva", referencedColumnName = "idReserva")
     private Reserva reserva;
 
-    private double cantidad;
-    private String metodoPago;
-    private boolean pagado;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fechaPago;
 
+    private double cantidad;
+    private String metodoPago;
+    private boolean pagado;
     private String detallesPago;
-
     private String tipoHamaca;
 }

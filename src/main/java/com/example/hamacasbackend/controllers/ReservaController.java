@@ -100,16 +100,20 @@ public class ReservaController {
             reservaRepositorio.save(reserva);
             sombrillaRepositorio.saveAll(sombrillas);
 
-            LOGGER.info("Reserva creada y asociada con sombrillas exitosamente. ID de Reserva: {}"+ reserva.getIdReserva());
+            LOGGER.info("Reserva creada y asociada con sombrillas exitosamente. ID de Reserva: {}" + reserva.getIdReserva());
             return ResponseEntity.status(HttpStatus.CREATED).body(reserva);
         } catch (DateTimeParseException e) {
-            LOGGER.info("Error de formato de fecha al crear reserva" +e);
+            LOGGER.info("Error de formato de fecha al crear reserva" + e);
             return ResponseEntity.badRequest().body("Formato de fecha incorrecto");
+        } catch (ResponseStatusException e) {
+            LOGGER.info("Error al crear la reserva: " + e.getMessage());
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         } catch (Exception e) {
-            LOGGER.info("Error al crear la reserva" +e);
+            LOGGER.info("Error al crear la reserva" + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la reserva");
         }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Reserva> getReservaById(@PathVariable("id") Long id) {

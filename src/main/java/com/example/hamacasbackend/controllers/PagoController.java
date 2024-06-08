@@ -64,14 +64,18 @@ public class PagoController {
     @PostMapping("/nuevoPago")
     public ResponseEntity<?> createPago(@RequestBody Pago pago) {
         try {
+
             Reserva reserva = reservaRepositorio.findById(pago.getReserva().getIdReserva())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
 
             pago.setReserva(reserva);
             Pago nuevoPago = pagoRepositorio.save(pago);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPago);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el pago: " + e.getMessage());
         }
     }
+
 }

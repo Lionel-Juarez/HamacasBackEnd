@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // ID autoincremental
+    private Long id;
 
-    private String uid; // UID de Firebase
+    private String uid;
     private String username;
     private String nombreCompleto;
     private String email;
