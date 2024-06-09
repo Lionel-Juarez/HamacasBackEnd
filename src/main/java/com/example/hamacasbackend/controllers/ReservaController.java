@@ -106,7 +106,6 @@ public class ReservaController {
         }
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<Reserva> getReservaById(@PathVariable("id") Long id) {
         Optional<Reserva> reservaData = reservaRepositorio.findById(id);
@@ -117,7 +116,7 @@ public class ReservaController {
     @PutMapping("/actualizarReserva/{id}")
     public ResponseEntity<?> updateReserva(@PathVariable Long id, @RequestBody ReservaDTO reservaDTO) {
         return reservaRepositorio.findById(id).map(existingReserva -> {
-            if ("Ha llegado".equals(reservaDTO.getEstado())) {
+            if ("Ha llegado".equals(reservaDTO.getEstado()) || "Cancelada".equals(reservaDTO.getEstado()) ) {
                 for (Sombrilla sombrilla : existingReserva.getSombrillas()) {
                     sombrilla.getReservas().remove(existingReserva);
                     sombrillaRepositorio.save(sombrilla);
@@ -134,4 +133,5 @@ public class ReservaController {
             return ResponseEntity.ok(existingReserva);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 }

@@ -29,6 +29,7 @@ public class Sombrilla {
     private double precio;
     private boolean ocupada;
     private boolean reservada;
+    private boolean pagada;
     private String cantidadHamacas;
 
 }
