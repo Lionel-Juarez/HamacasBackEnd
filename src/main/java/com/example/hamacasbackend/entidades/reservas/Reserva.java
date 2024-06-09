@@ -2,7 +2,6 @@ package com.example.hamacasbackend.entidades.reservas;
 
 import com.example.hamacasbackend.entidades.cliente.Cliente;
 import com.example.hamacasbackend.entidades.sombrillas.Sombrilla;
-import com.example.hamacasbackend.entidades.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -49,9 +48,4 @@ public class Reserva {
     @JoinColumn(name = "idCliente", referencedColumnName = "idCliente")
     private Cliente cliente;
 
-    @ManyToOne
-    @JoinColumn(name = "idUsuario", referencedColumnName = "id")
-    private Usuario creadaPor;
-
-    private String nombreUsuario;
 }

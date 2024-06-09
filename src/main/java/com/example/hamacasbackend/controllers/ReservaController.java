@@ -2,11 +2,9 @@ package com.example.hamacasbackend.controllers;
 import com.example.hamacasbackend.entidades.cliente.Cliente;
 import com.example.hamacasbackend.entidades.sombrillas.Sombrilla;import com.example.hamacasbackend.entidades.reservas.Reserva;
 import com.example.hamacasbackend.entidades.reservas.ReservaDTO;
-import com.example.hamacasbackend.entidades.usuarios.Usuario;
 import com.example.hamacasbackend.repositorios.ClienteRepositorio;
 import com.example.hamacasbackend.repositorios.SombrillaRepositorio;
 import com.example.hamacasbackend.repositorios.ReservaRepositorio;
-import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +29,6 @@ public class ReservaController {
     private ReservaRepositorio reservaRepositorio;
     @Autowired
     private ClienteRepositorio clienteRepositorio;
-    @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private SombrillaRepositorio sombrillaRepositorio;
     private static final Logger LOGGER = Logger.getLogger(ReservaController.class.getName());
@@ -73,8 +69,6 @@ public class ReservaController {
         try {
             Cliente cliente = clienteRepositorio.findById(reservaDTO.getIdCliente())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
-            Usuario usuario = usuarioRepositorio.findByUid(reservaDTO.getUid())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
             List<Sombrilla> sombrillas = StreamSupport.stream(sombrillaRepositorio.findAllById(reservaDTO.getIdSombrillas()).spliterator(), false)
                     .collect(Collectors.toList());
 
@@ -85,7 +79,6 @@ public class ReservaController {
 
             Reserva reserva = new Reserva();
             reserva.setCliente(cliente);
-            reserva.setCreadaPor(usuario);
             reserva.setEstado(reservaDTO.getEstado());
             reserva.setPagada(reservaDTO.isPagada());
             reserva.setMetodoPago(reservaDTO.getMetodoPago());
@@ -94,7 +87,6 @@ public class ReservaController {
             reserva.setFechaReservaRealizada(reservaDTO.getFechaReservaRealizada());
             reserva.setFechaPago(reservaDTO.getFechaPago());
             reserva.setSombrillas(sombrillas);
-            reserva.setNombreUsuario(reservaDTO.getNombreUsuario());
             sombrillas.forEach(h -> h.getReservas().add(reserva));
 
             reservaRepositorio.save(reserva);
@@ -125,20 +117,21 @@ public class ReservaController {
     @PutMapping("/actualizarReserva/{id}")
     public ResponseEntity<?> updateReserva(@PathVariable Long id, @RequestBody ReservaDTO reservaDTO) {
         return reservaRepositorio.findById(id).map(existingReserva -> {
+            if ("Ha llegado".equals(reservaDTO.getEstado())) {
+                for (Sombrilla sombrilla : existingReserva.getSombrillas()) {
+                    sombrilla.getReservas().remove(existingReserva);
+                    sombrillaRepositorio.save(sombrilla);
+                }
+                existingReserva.getSombrillas().clear();
+            }
+
             existingReserva.setPagada(reservaDTO.isPagada());
             existingReserva.setMetodoPago(reservaDTO.getMetodoPago());
             existingReserva.setFechaPago(reservaDTO.getFechaPago());
-
-            List<Sombrilla> sombrillas = existingReserva.getSombrillas();
-            for (Sombrilla sombrilla : sombrillas) {
-                sombrilla.setReservada(false);
-                sombrilla.setOcupada(true);
-            }
+            existingReserva.setEstado(reservaDTO.getEstado());
 
             reservaRepositorio.save(existingReserva);
-            sombrillaRepositorio.saveAll(sombrillas);
             return ResponseEntity.ok(existingReserva);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 }

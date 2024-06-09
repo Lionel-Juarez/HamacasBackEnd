@@ -67,21 +67,17 @@ public class SombrillaController {
     }
 
 
-    @PutMapping("/updateSombrilla/{id}")
-    public ResponseEntity<Sombrilla> updateSombrilla(@PathVariable("id") Long id, @RequestBody Sombrilla sombrillaDetails) {
+    @PatchMapping("/updateSombrilla/{id}")
+    public ResponseEntity<Sombrilla> partialUpdateSombrilla(@PathVariable("id") Long id, @RequestBody Map<String, Object> updates) {
         return sombrillaRepositorio.findById(id).map(sombrilla -> {
-            sombrilla.setPrecio(sombrillaDetails.getPrecio());
-            sombrilla.setOcupada(sombrillaDetails.isOcupada());
-            sombrilla.setReservada(sombrillaDetails.isReservada());
-            sombrilla.setNumeroSombrilla(sombrillaDetails.getNumeroSombrilla());
-            sombrilla.setCantidadHamacas(sombrillaDetails.getCantidadHamacas());
-            if (sombrillaDetails.getReservas() != null && !sombrillaDetails.getReservas().isEmpty()) {
-                List<Long> reservaIds = sombrillaDetails.getReservas().stream().map(Reserva::getIdReserva).toList();
-                List<Reserva> reservas = new ArrayList<>();
-                for (Long reservaId : reservaIds) {
-                    reservaRepositorio.findById(reservaId).ifPresent(reservas::add);
-                }
-                sombrilla.setReservas(reservas);
+            if (updates.containsKey("reservada")) {
+                sombrilla.setReservada((Boolean) updates.get("reservada"));
+            }
+            if (updates.containsKey("ocupada")) {
+                sombrilla.setOcupada((Boolean) updates.get("ocupada"));
+            }
+            if (updates.containsKey("cantidadHamacas")) {
+                sombrilla.setCantidadHamacas((String) updates.get("cantidadHamacas"));
             }
             return new ResponseEntity<>(sombrillaRepositorio.save(sombrilla), HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());

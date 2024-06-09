@@ -30,6 +30,4 @@ public class Reporte {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime fechaCreacion;
 
-    private String creadoPorUid;
-    private String creadoPorNombre;
 }
