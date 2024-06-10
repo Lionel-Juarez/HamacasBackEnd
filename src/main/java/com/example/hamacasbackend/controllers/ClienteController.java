@@ -65,7 +65,7 @@ public class ClienteController {
             cliente.setNombreCompleto(clienteDetails.getNombreCompleto());
             cliente.setNumeroTelefono(clienteDetails.getNumeroTelefono());
             cliente.setEmail(clienteDetails.getEmail());
-            cliente.setUid(clienteDetails.getUid());
+//            cliente.setUid(clienteDetails.getUid());
             Cliente updatedCliente = clienteRepositorio.save(cliente);
             return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
         }).orElseGet(() -> ResponseEntity.notFound().build());
