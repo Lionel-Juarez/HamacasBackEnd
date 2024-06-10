@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PagoRepositorio extends CrudRepository<Pago, Long> {
@@ -18,7 +19,7 @@ public interface PagoRepositorio extends CrudRepository<Pago, Long> {
     List<Pago> findByMes(@Param("year") int year, @Param("month") int month);
 
     @Query("SELECT p FROM Pago p WHERE YEAR(p.fechaPago) = :year")
-    List<Pago> findByAno(@Param("year") int year);
+    List<Pago> findByAnio(@Param("year") int year);
 
     @Query("SELECT p FROM Pago p WHERE p.metodoPago = :metodoPago")
     List<Pago> findByMetodoPago(@Param("metodoPago") String metodoPago);
@@ -28,4 +29,9 @@ public interface PagoRepositorio extends CrudRepository<Pago, Long> {
 
     @Query("SELECT p FROM Pago p WHERE p.tipoHamaca = :tipoHamaca")
     List<Pago> findByTipoHamaca(@Param("tipoHamaca") String tipoHamaca);
+
+    @Query("SELECT p FROM Pago p WHERE p.fechaPago BETWEEN :start AND :end")
+    List<Pago> findByFechaPagoBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+
 }

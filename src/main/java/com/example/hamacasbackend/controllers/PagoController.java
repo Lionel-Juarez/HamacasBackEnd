@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -27,6 +28,7 @@ public class PagoController {
 
     @Autowired
     private ReservaRepositorio reservaRepositorio;
+
 
     @GetMapping
     public ResponseEntity<List<Pago>> getAllPagos(
@@ -47,7 +49,7 @@ public class PagoController {
         } else if (mes != null && ano != null) {
             pagos = pagoRepositorio.findByMes(ano, mes); // Paginate this as well if needed
         } else if (ano != null) {
-            pagos = pagoRepositorio.findByAno(ano); // Paginate this as well if needed
+            pagos = pagoRepositorio.findByAnio(ano); // Paginate this as well if needed
         } else if (metodoPago != null) {
             pagos = pagoRepositorio.findByMetodoPago(metodoPago); // Paginate this as well if needed
         } else if (pagado != null) {
@@ -58,6 +60,14 @@ public class PagoController {
             Iterable<Pago> result = pagoRepositorio.findAll();
             pagos = StreamSupport.stream(result.spliterator(), false).collect(Collectors.toList()); // Paginate this as well if needed
         }
+        return new ResponseEntity<>(pagos, HttpStatus.OK);
+    }
+
+    @GetMapping("/fecha-rango")
+    public ResponseEntity<List<Pago>> getPagosByDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+        List<Pago> pagos = pagoRepositorio.findByFechaPagoBetween(start, end);
         return new ResponseEntity<>(pagos, HttpStatus.OK);
     }
 
