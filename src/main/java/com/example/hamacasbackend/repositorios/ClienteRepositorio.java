@@ -1,6 +1,6 @@
 package com.example.hamacasbackend.repositorios;
 
-import com.example.hamacasbackend.entidades.cliente.Cliente;
+import com.example.hamacasbackend.entidades.Cliente;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

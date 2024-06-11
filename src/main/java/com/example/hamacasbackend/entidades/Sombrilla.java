@@ -1,6 +1,5 @@
-package com.example.hamacasbackend.entidades.sombrillas;
+package com.example.hamacasbackend.entidades;
 
-import com.example.hamacasbackend.entidades.reservas.Reserva;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;

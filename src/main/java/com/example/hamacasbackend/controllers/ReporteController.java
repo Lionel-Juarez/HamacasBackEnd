@@ -1,7 +1,6 @@
 package com.example.hamacasbackend.controllers;
-import com.example.hamacasbackend.entidades.reportes.Reporte;
+import com.example.hamacasbackend.entidades.Reporte;
 import com.example.hamacasbackend.repositorios.ReporteRepositorio;
-import com.example.hamacasbackend.repositorios.UsuarioRepositorio; // Asumiendo que tienes un repositorio para Usuario
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

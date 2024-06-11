@@ -1,7 +1,7 @@
 package com.example.hamacasbackend.controllers;
 
-import com.example.hamacasbackend.entidades.pagos.Pago;
-import com.example.hamacasbackend.entidades.reservas.Reserva;
+import com.example.hamacasbackend.entidades.Pago;
+import com.example.hamacasbackend.entidades.Reserva;
 import com.example.hamacasbackend.repositorios.PagoRepositorio;
 import com.example.hamacasbackend.repositorios.ReservaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
-package com.example.hamacasbackend.entidades.pagos;
+package com.example.hamacasbackend.entidades;
 
-import com.example.hamacasbackend.entidades.reservas.Reserva;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

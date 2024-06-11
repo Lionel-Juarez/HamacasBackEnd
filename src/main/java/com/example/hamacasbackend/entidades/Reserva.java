@@ -1,7 +1,5 @@
-package com.example.hamacasbackend.entidades.reservas;
+package com.example.hamacasbackend.entidades;
 
-import com.example.hamacasbackend.entidades.cliente.Cliente;
-import com.example.hamacasbackend.entidades.sombrillas.Sombrilla;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

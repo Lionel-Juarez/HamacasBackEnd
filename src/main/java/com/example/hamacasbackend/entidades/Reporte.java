@@ -1,4 +1,4 @@
-package com.example.hamacasbackend.entidades.reportes;
+package com.example.hamacasbackend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

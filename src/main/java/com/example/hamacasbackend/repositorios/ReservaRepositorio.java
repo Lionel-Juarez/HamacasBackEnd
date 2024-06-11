@@ -1,6 +1,6 @@
 package com.example.hamacasbackend.repositorios;
 
-import com.example.hamacasbackend.entidades.reservas.Reserva;
+import com.example.hamacasbackend.entidades.Reserva;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

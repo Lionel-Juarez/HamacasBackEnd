@@ -1,7 +1,7 @@
 package com.example.hamacasbackend.controllers;
-import com.example.hamacasbackend.entidades.cliente.Cliente;
-import com.example.hamacasbackend.entidades.sombrillas.Sombrilla;import com.example.hamacasbackend.entidades.reservas.Reserva;
-import com.example.hamacasbackend.entidades.reservas.ReservaDTO;
+import com.example.hamacasbackend.entidades.Cliente;
+import com.example.hamacasbackend.entidades.Sombrilla;import com.example.hamacasbackend.entidades.Reserva;
+import com.example.hamacasbackend.entidades.ReservaDTO;
 import com.example.hamacasbackend.repositorios.ClienteRepositorio;
 import com.example.hamacasbackend.repositorios.SombrillaRepositorio;
 import com.example.hamacasbackend.repositorios.ReservaRepositorio;

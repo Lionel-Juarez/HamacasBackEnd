@@ -1,5 +1,5 @@
 package com.example.hamacasbackend.controllers;
-import com.example.hamacasbackend.entidades.usuarios.Usuario;
+import com.example.hamacasbackend.entidades.Usuario;
 import com.example.hamacasbackend.repositorios.UsuarioRepositorio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
