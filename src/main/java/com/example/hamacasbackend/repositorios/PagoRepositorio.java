@@ -12,26 +12,24 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PagoRepositorio extends CrudRepository<Pago, Long> {
-    @Query("SELECT p FROM Pago p WHERE FUNCTION('DATE', p.fechaPago) = :fecha")
+    @Query("SELECT p FROM Pago p WHERE FUNCTION('DATE', p.fechaPago) = :fecha ORDER BY p.fechaPago DESC")
     Page<Pago> findByFechaPago(@Param("fecha") LocalDate fecha, Pageable pageable);
 
-    @Query("SELECT p FROM Pago p WHERE YEAR(p.fechaPago) = :year AND MONTH(p.fechaPago) = :month")
+    @Query("SELECT p FROM Pago p WHERE YEAR(p.fechaPago) = :year AND MONTH(p.fechaPago) = :month ORDER BY p.fechaPago DESC")
     List<Pago> findByMes(@Param("year") int year, @Param("month") int month);
 
-    @Query("SELECT p FROM Pago p WHERE YEAR(p.fechaPago) = :year")
+    @Query("SELECT p FROM Pago p WHERE YEAR(p.fechaPago) = :year ORDER BY p.fechaPago DESC")
     List<Pago> findByAnio(@Param("year") int year);
 
-    @Query("SELECT p FROM Pago p WHERE p.metodoPago = :metodoPago")
+    @Query("SELECT p FROM Pago p WHERE p.metodoPago = :metodoPago ORDER BY p.fechaPago DESC")
     List<Pago> findByMetodoPago(@Param("metodoPago") String metodoPago);
 
-    @Query("SELECT p FROM Pago p WHERE p.pagado = :pagado")
+    @Query("SELECT p FROM Pago p WHERE p.pagado = :pagado ORDER BY p.fechaPago DESC")
     List<Pago> findByPagado(@Param("pagado") boolean pagado);
 
-    @Query("SELECT p FROM Pago p WHERE p.tipoHamaca = :tipoHamaca")
+    @Query("SELECT p FROM Pago p WHERE p.tipoHamaca = :tipoHamaca ORDER BY p.fechaPago DESC")
     List<Pago> findByTipoHamaca(@Param("tipoHamaca") String tipoHamaca);
 
-    @Query("SELECT p FROM Pago p WHERE p.fechaPago BETWEEN :start AND :end")
+    @Query("SELECT p FROM Pago p WHERE p.fechaPago BETWEEN :start AND :end ORDER BY p.fechaPago DESC")
     List<Pago> findByFechaPagoBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-
-
 }

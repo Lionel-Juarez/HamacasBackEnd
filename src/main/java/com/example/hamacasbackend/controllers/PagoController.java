@@ -29,7 +29,6 @@ public class PagoController {
     @Autowired
     private ReservaRepositorio reservaRepositorio;
 
-
     @GetMapping
     public ResponseEntity<List<Pago>> getAllPagos(
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha,
@@ -47,18 +46,20 @@ public class PagoController {
             Page<Pago> pagoPage = pagoRepositorio.findByFechaPago(fecha, pageable);
             pagos = pagoPage.getContent();
         } else if (mes != null && ano != null) {
-            pagos = pagoRepositorio.findByMes(ano, mes); // Paginate this as well if needed
+            pagos = pagoRepositorio.findByMes(ano, mes);
         } else if (ano != null) {
-            pagos = pagoRepositorio.findByAnio(ano); // Paginate this as well if needed
+            pagos = pagoRepositorio.findByAnio(ano);
         } else if (metodoPago != null) {
-            pagos = pagoRepositorio.findByMetodoPago(metodoPago); // Paginate this as well if needed
+            pagos = pagoRepositorio.findByMetodoPago(metodoPago);
         } else if (pagado != null) {
-            pagos = pagoRepositorio.findByPagado(pagado); // Paginate this as well if needed
+            pagos = pagoRepositorio.findByPagado(pagado);
         } else if (tipoHamaca != null) {
-            pagos = pagoRepositorio.findByTipoHamaca(tipoHamaca); // Paginate this as well if needed
+            pagos = pagoRepositorio.findByTipoHamaca(tipoHamaca);
         } else {
             Iterable<Pago> result = pagoRepositorio.findAll();
-            pagos = StreamSupport.stream(result.spliterator(), false).collect(Collectors.toList()); // Paginate this as well if needed
+            pagos = StreamSupport.stream(result.spliterator(), false)
+                    .sorted((p1, p2) -> p2.getFechaPago().compareTo(p1.getFechaPago())) // Ensure sorting here if needed
+                    .collect(Collectors.toList());
         }
         return new ResponseEntity<>(pagos, HttpStatus.OK);
     }
@@ -74,11 +75,11 @@ public class PagoController {
     @PostMapping("/nuevoPago")
     public ResponseEntity<?> createPago(@RequestBody Pago pago) {
         try {
-
-            Reserva reserva = reservaRepositorio.findById(pago.getReserva().getIdReserva())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
-
-            pago.setReserva(reserva);
+            if (pago.getReserva() != null) {
+                Reserva reserva = reservaRepositorio.findById(pago.getReserva().getIdReserva())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+                pago.setReserva(reserva);
+            }
             Pago nuevoPago = pagoRepositorio.save(pago);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPago);
         } catch (ResponseStatusException e) {
@@ -88,4 +89,14 @@ public class PagoController {
         }
     }
 
+    @PostMapping("/nuevoPagoSinReserva")
+    public ResponseEntity<?> createPagoSinReserva(@RequestBody Pago pago) {
+        try {
+            Pago nuevoPago = pagoRepositorio.save(pago);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPago);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el pago: " + e.getMessage());
+        }
+    }
 }
+

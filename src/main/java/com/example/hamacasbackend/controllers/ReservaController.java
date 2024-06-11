@@ -47,6 +47,7 @@ public class ReservaController {
         } else {
             Iterable<Reserva> result = reservaRepositorio.findAll();
             reservas = StreamSupport.stream(result.spliterator(), false)
+                    .sorted((r1, r2) -> r2.getFechaReserva().compareTo(r1.getFechaReserva()))
                     .collect(Collectors.toList());
         }
         return new ResponseEntity<>(reservas, HttpStatus.OK);

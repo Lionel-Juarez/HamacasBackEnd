@@ -66,7 +66,6 @@ public class SombrillaController {
         return sombrillaFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     @PatchMapping("/updateSombrilla/{id}")
     public ResponseEntity<Sombrilla> partialUpdateSombrilla(@PathVariable("id") Long id, @RequestBody Map<String, Object> updates) {
         return sombrillaRepositorio.findById(id).map(sombrilla -> {
@@ -79,10 +78,16 @@ public class SombrillaController {
             if (updates.containsKey("cantidadHamacas")) {
                 sombrilla.setCantidadHamacas((String) updates.get("cantidadHamacas"));
             }
+            if (updates.containsKey("pagada")) {
+                sombrilla.setPagada((Boolean) updates.get("pagada"));
+            }
+            LOGGER.info("Actualizando sombrilla con ID " + id + " con datos: " + updates);
             return new ResponseEntity<>(sombrillaRepositorio.save(sombrilla), HttpStatus.OK);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+        }).orElseGet(() -> {
+            LOGGER.info("No se encontró sombrilla con ID " + id);
+            return ResponseEntity.notFound().build();
+        });
     }
-
 
     @PatchMapping("/updateReservaSombrilla/{id}")
     public ResponseEntity<?> updateSombrillaReserva(@PathVariable("id") Long id, @RequestParam("idReserva") Long idReserva, @RequestParam("cantidadHamacas") String cantidadHamacas) {
@@ -122,6 +127,14 @@ public class SombrillaController {
         } catch (ClassCastException | NullPointerException e) {
             return ResponseEntity.badRequest().body("Invalid request data");
         }
+    }
+
+    @PatchMapping("/updatePagoSombrilla/{id}")
+    public ResponseEntity<Sombrilla> updatePagoSombrilla(@PathVariable("id") Long id, @RequestParam("pagada") boolean pagada) {
+        return sombrillaRepositorio.findById(id).map(sombrilla -> {
+            sombrilla.setPagada(pagada);
+            return new ResponseEntity<>(sombrillaRepositorio.save(sombrilla), HttpStatus.OK);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     private List<Integer> convertToListOfIntegers(Object obj) {
