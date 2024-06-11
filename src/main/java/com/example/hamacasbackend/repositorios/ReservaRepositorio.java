@@ -23,6 +23,14 @@ public interface ReservaRepositorio extends CrudRepository<Reserva, Long> {
 
     @Query("SELECT r FROM Reserva r WHERE r.fechaReserva >= :start AND r.fechaReserva < :end AND LOWER(r.estado) = LOWER(:estado)")
     List<Reserva> findByFechaReservaAndEstado(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("estado") String estado);
+    @Query("SELECT r FROM Reserva r WHERE r.cliente.idCliente = :idCliente")
+    List<Reserva> findByClienteId(@Param("idCliente") Long idCliente);
+    @Query("SELECT COUNT(r) FROM Reserva r WHERE r.cliente.idCliente = :idCliente")
+    long countByClienteId(@Param("idCliente") Long idCliente);
+
+    @Query("SELECT COUNT(r) FROM Reserva r WHERE r.cliente.idCliente = :idCliente AND LOWER(r.estado) = LOWER(:estado)")
+    long countByClienteIdAndEstado(@Param("idCliente") Long idCliente, @Param("estado") String estado);
+
 }
 
 

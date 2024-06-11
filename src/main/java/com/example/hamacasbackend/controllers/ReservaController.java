@@ -134,4 +134,20 @@ public class ReservaController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/cliente/{idCliente}")
+    public ResponseEntity<List<Reserva>> getReservasByIdCliente(@PathVariable Long idCliente) {
+        List<Reserva> reservas = reservaRepositorio.findByClienteId(idCliente);
+        return new ResponseEntity<>(reservas, HttpStatus.OK);
+    }
+
+    @GetMapping("/countByCliente/{idCliente}")
+    public ResponseEntity<Long> countReservasByCliente(@PathVariable Long idCliente) {
+        long count = reservaRepositorio.countByClienteId(idCliente);
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+    @GetMapping("/countByClientePendientes/{idCliente}")
+    public ResponseEntity<Long> countReservasByClientePendientes(@PathVariable Long idCliente) {
+        long count = reservaRepositorio.countByClienteIdAndEstado(idCliente, "Pendiente");
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
 }
