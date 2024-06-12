@@ -50,14 +50,14 @@ SELECT 0, 24, false, 5, false, false FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM s
 
 -- Insertar datos en la tabla 'usuario' solo si no existen
 INSERT INTO usuario (rol, email, nombre_completo, telefono, uid, username)
-SELECT 'ADMIN', 'admin@admin.com', 'Lionel Juarez', '600000000', 'KvLFipGQnxWuVjYu5OJGvFihGUx1', 'lioneljuarez' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE uid = 'KvLFipGQnxWuVjYu5OJGvFihGUx1');
+SELECT 'ADMIN', 'admin@admin.com', 'Lionel Juarez', '600000000', '4I0588z3P0TIz8EJqhtGkiRiryl2', 'lioneljuarez' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE uid = '4I0588z3P0TIz8EJqhtGkiRiryl2');
 INSERT INTO usuario (rol, email, nombre_completo, telefono, uid, username)
-SELECT 'TRABAJADOR', 'worker@worker.com', 'Trabajador', '600000000', 'Q6hFHOgV5daczDWTWcTy5silgBs1', 'trabajador' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE uid = 'Q6hFHOgV5daczDWTWcTy5silgBs1');
+SELECT 'TRABAJADOR', 'worker@worker.com', 'Trabajador', '600000000', 'DqUiE2jwxTOvKVCwpA6gMFzEOkv2', 'trabajador' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE uid = 'DqUiE2jwxTOvKVCwpA6gMFzEOkv2');
 
 -- Insertar datos en la tabla 'cliente' solo si no existen
 INSERT INTO cliente (nombre_completo, numero_telefono, email, rol, uid)
-SELECT 'Administrador', '600000000', 'admin@admin.com', 'ADMIN', 'KvLFipGQnxWuVjYu5OJGvFihGUx1' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM cliente WHERE uid = 'KvLFipGQnxWuVjYu5OJGvFihGUx1');
+SELECT 'Administrador', '600000000', 'admin@admin.com', 'ADMIN', '4I0588z3P0TIz8EJqhtGkiRiryl2' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM cliente WHERE uid = '4I0588z3P0TIz8EJqhtGkiRiryl2');
 INSERT INTO cliente (nombre_completo, numero_telefono, email, rol, uid)
-SELECT 'Trabajador', '600000000', 'worker@worker.com', 'TRABAJADOR', 'Q6hFHOgV5daczDWTWcTy5silgBs1' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM cliente WHERE uid = 'Q6hFHOgV5daczDWTWcTy5silgBs1');
+SELECT 'Trabajador', '600000000', 'worker@worker.com', 'TRABAJADOR', 'DqUiE2jwxTOvKVCwpA6gMFzEOkv2' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM cliente WHERE uid = 'DqUiE2jwxTOvKVCwpA6gMFzEOkv2');
 INSERT INTO cliente (nombre_completo, numero_telefono, email, rol, uid)
-SELECT 'Cliente de prueba', '600000000', 'cliente@cliente.com', 'CLIENTE', 'AWFRc2DPQsfvxrdqcbmRJdKuGWs2' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM cliente WHERE uid = 'AWFRc2DPQsfvxrdqcbmRJdKuGWs2');
+SELECT 'Cliente de prueba', '600000000', 'cliente@cliente.com', 'CLIENTE', 'VqECVZ20KreHEYms4X0UnNQIVJk2' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM cliente WHERE uid = 'VqECVZ20KreHEYms4X0UnNQIVJk2');
